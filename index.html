@@ -1,34 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Premium Animated Website</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Premium About Me</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --neon:#63ffff;
+  --violet:#a855f7;
+  --bg:#050505;
+}
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
+html{scroll-behavior:smooth}
 body{
-  background:#050505;
+  background:var(--bg);
   color:white;
   overflow-x:hidden;
 }
 
-/* ===== BACKGROUND GLOW ===== */
-.blob{
-  position:absolute;
-  width:400px;
-  height:400px;
-  background:radial-gradient(circle,#6affff55,#0000);
-  filter:blur(80px);
-  animation:float 12s infinite alternate;
+/* ===== CURSOR GLOW ===== */
+.cursor{
+  position:fixed;
+  width:40px;height:40px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle,var(--neon),transparent 70%);
+  filter:blur(8px);
+  transform:translate(-50%,-50%);
+  z-index:999;
 }
-.blob.one{top:10%;left:10%}
-.blob.two{bottom:10%;right:10%;animation-delay:3s}
 
-@keyframes float{
-  to{transform:translate(120px,-80px)}
+/* ===== FLOATING BACKGROUND ===== */
+.orb{
+  position:absolute;
+  width:420px;height:420px;
+  background:radial-gradient(circle,#63ffff55,#0000 70%);
+  filter:blur(90px);
+  animation:drift 15s infinite alternate;
+}
+.orb.two{
+  background:radial-gradient(circle,#a855f755,#0000 70%);
+  right:0;top:50%;
+  animation-delay:4s;
+}
+
+@keyframes drift{
+  to{transform:translate(140px,-120px)}
 }
 
 /* ===== HERO ===== */
@@ -39,170 +59,235 @@ body{
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:80px 20px;
+  padding:100px 20px;
   position:relative;
 }
 
 .hero h1{
-  font-size:clamp(3rem,6vw,5rem);
-  background:linear-gradient(90deg,#fff,#66ffff,#a855f7);
+  font-size:clamp(3rem,7vw,6rem);
+  background:linear-gradient(90deg,#fff,var(--neon),var(--violet));
+  background-size:300%;
   -webkit-background-clip:text;
   color:transparent;
-  animation:shine 4s linear infinite;
+  animation:shine 6s linear infinite;
 }
-
-@keyframes shine{
-  to{background-position:300%}
-}
+@keyframes shine{to{background-position:300%}}
 
 .hero p{
-  max-width:700px;
-  opacity:.8;
-  margin-top:20px;
+  margin-top:25px;
+  max-width:720px;
+  opacity:.75;
+  font-size:1.2rem;
 }
 
-.cta{
-  margin-top:40px;
-  padding:15px 40px;
-  border-radius:50px;
-  background:#0ff;
-  color:black;
-  font-weight:700;
+.btn{
+  margin-top:50px;
+  padding:16px 44px;
+  border-radius:60px;
   border:none;
+  font-weight:700;
   cursor:pointer;
-  box-shadow:0 0 30px #0ff;
+  background:var(--neon);
+  color:black;
+  box-shadow:0 0 40px var(--neon);
   transition:.3s;
 }
-.cta:hover{transform:scale(1.1);box-shadow:0 0 60px #0ff}
+.btn:hover{transform:scale(1.15);box-shadow:0 0 80px var(--neon)}
 
 /* ===== SECTIONS ===== */
 section{
-  padding:120px 10%;
+  padding:140px 10%;
+  position:relative;
 }
-
-.title{
+h2{
   font-size:3rem;
   margin-bottom:60px;
   text-align:center;
 }
 
-/* ===== CARDS ===== */
-.cards{
+/* ===== GLASS PANELS ===== */
+.glass{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(22px);
+  border-radius:30px;
+  padding:50px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 0 40px #000;
+}
+
+/* ===== ABOUT GRID ===== */
+.about-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:40px;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:50px;
 }
 
-.card{
-  background:rgba(255,255,255,0.06);
-  backdrop-filter:blur(20px);
-  border-radius:25px;
-  padding:40px;
-  border:1px solid rgba(255,255,255,0.1);
-  transition:.4s;
-  transform-style:preserve-3d;
+/* ===== SKILLS ===== */
+.skill{
+  margin:25px 0;
 }
-
-.card:hover{
-  transform:rotateX(8deg) rotateY(-8deg) scale(1.05);
-  box-shadow:0 0 40px #0ff5;
+.skill span{display:flex;justify-content:space-between}
+.bar{
+  height:8px;
+  background:#222;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:10px;
+}
+.fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--neon),var(--violet));
+  box-shadow:0 0 15px var(--neon);
 }
 
 /* ===== STATS ===== */
 .stats{
   display:flex;
   justify-content:center;
-  gap:80px;
+  gap:90px;
   text-align:center;
 }
-.stat h2{font-size:3rem;color:#0ff}
-
-/* ===== FOOTER ===== */
-footer{
-  padding:60px;
-  text-align:center;
-  opacity:.5;
+.stats h3{
+  font-size:3rem;
+  color:var(--neon);
 }
 
-/* ===== SCROLL ANIM ===== */
+/* ===== REVEAL ===== */
 .reveal{
   opacity:0;
-  transform:translateY(80px);
+  transform:translateY(80px) scale(.96);
   transition:1s cubic-bezier(.19,1,.22,1);
 }
 .reveal.show{
   opacity:1;
   transform:none;
 }
+
+/* ===== FOOTER ===== */
+footer{
+  padding:70px;
+  text-align:center;
+  opacity:.4;
+}
 </style>
 </head>
 <body>
 
-<div class="blob one"></div>
-<div class="blob two"></div>
+<div class="cursor"></div>
+
+<div class="orb"></div>
+<div class="orb two"></div>
 
 <!-- HERO -->
 <div class="hero">
-  <h1>Future-Grade Automation</h1>
-  <p>Premium UI. Real-time systems. Neon-powered experience.</p>
-  <button class="cta">Launch Dashboard</button>
+  <h1>I Build Future-Ready Digital Experiences</h1>
+  <p>
+    Creative developer focused on immersive interfaces, automation systems,
+    and premium-grade web design with cinematic motion.
+  </p>
+  <a href="#about"><button class="btn">Explore My Work</button></a>
 </div>
 
-<!-- FEATURES -->
-<section>
-  <h2 class="title reveal">Core Features</h2>
-  <div class="cards">
-    <div class="card reveal">⚡ Lightning-fast systems</div>
-    <div class="card reveal">🎛 Animated dashboards</div>
-    <div class="card reveal">🎨 Neon UI themes</div>
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="reveal">About Me</h2>
+  <div class="about-grid">
+    <div class="glass reveal">
+      <h3>Who I Am</h3>
+      <p>
+        A digital creator obsessed with clean systems, fluid motion,
+        and futuristic user experiences. I design interfaces that
+        feel alive—not static.
+      </p>
+    </div>
+
+    <div class="glass reveal">
+      <h3>What I Do</h3>
+      <div class="skill">
+        <span><b>Frontend Motion</b><b>92%</b></span>
+        <div class="bar"><div class="fill" data-fill="92"></div></div>
+      </div>
+      <div class="skill">
+        <span><b>UI Systems</b><b>88%</b></span>
+        <div class="bar"><div class="fill" data-fill="88"></div></div>
+      </div>
+      <div class="skill">
+        <span><b>Automation</b><b>90%</b></span>
+        <div class="bar"><div class="fill" data-fill="90"></div></div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- STATS -->
 <section>
-  <h2 class="title reveal">Live Impact</h2>
+  <h2 class="reveal">My Impact</h2>
   <div class="stats">
-    <div class="stat reveal"><h2 data-count="4500">0</h2><p>Servers</p></div>
-    <div class="stat reveal"><h2 data-count="1200000">0</h2><p>Commands</p></div>
-    <div class="stat reveal"><h2 data-count="99">0</h2><p>Uptime %</p></div>
+    <div class="reveal"><h3 data-count="120">0</h3><p>Projects</p></div>
+    <div class="reveal"><h3 data-count="5">0</h3><p>Years</p></div>
+    <div class="reveal"><h3 data-count="99">0</h3><p>Satisfaction %</p></div>
   </div>
 </section>
 
 <footer>
-  © 2026 Premium Systems
+  © 2026 • Premium Digital Identity
 </footer>
 
 <script>
-/* ===== REVEAL ON SCROLL ===== */
-const reveals=document.querySelectorAll(".reveal");
+/* ===== CURSOR FOLLOW ===== */
+const cursor=document.querySelector(".cursor");
+window.addEventListener("mousemove",e=>{
+  cursor.style.left=e.clientX+"px";
+  cursor.style.top=e.clientY+"px";
+});
 
-const io=new IntersectionObserver(entries=>{
+/* ===== REVEAL ===== */
+const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
       e.target.classList.add("show");
     }
   });
-},{threshold:.2});
+},{threshold:.25});
 
-reveals.forEach(r=>io.observe(r));
+document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
 
-/* ===== COUNT UP ===== */
+/* ===== COUNTERS ===== */
 document.querySelectorAll("[data-count]").forEach(el=>{
   const target=+el.dataset.count;
   let cur=0;
-  const inc=target/120;
+  const step=target/120;
 
-  function tick(){
-    cur+=inc;
+  function run(){
+    cur+=step;
     if(cur<target){
-      el.innerText=Math.floor(cur);
-      requestAnimationFrame(tick);
+      el.textContent=Math.floor(cur);
+      requestAnimationFrame(run);
     }else{
-      el.innerText=target;
+      el.textContent=target;
     }
   }
-  tick();
+  run();
 });
+
+/* ===== SKILL BARS ===== */
+document.querySelectorAll(".fill").forEach(bar=>{
+  obs.observe(bar);
+  bar.addEventListener("transitionend",()=>{});
+});
+
+obs.disconnect();
+const skillObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const f=e.target.dataset.fill;
+      e.target.style.width=f+"%";
+    }
+  });
+},{threshold:.4});
+
+document.querySelectorAll(".fill").forEach(el=>skillObs.observe(el));
 </script>
 
 </body>
