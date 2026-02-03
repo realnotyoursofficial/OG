@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Premium Animated Website</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
+body{
+  background:#050505;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* ===== BACKGROUND GLOW ===== */
+.blob{
+  position:absolute;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,#6affff55,#0000);
+  filter:blur(80px);
+  animation:float 12s infinite alternate;
+}
+.blob.one{top:10%;left:10%}
+.blob.two{bottom:10%;right:10%;animation-delay:3s}
+
+@keyframes float{
+  to{transform:translate(120px,-80px)}
+}
+
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:80px 20px;
+  position:relative;
+}
+
+.hero h1{
+  font-size:clamp(3rem,6vw,5rem);
+  background:linear-gradient(90deg,#fff,#66ffff,#a855f7);
+  -webkit-background-clip:text;
+  color:transparent;
+  animation:shine 4s linear infinite;
+}
+
+@keyframes shine{
+  to{background-position:300%}
+}
+
+.hero p{
+  max-width:700px;
+  opacity:.8;
+  margin-top:20px;
+}
+
+.cta{
+  margin-top:40px;
+  padding:15px 40px;
+  border-radius:50px;
+  background:#0ff;
+  color:black;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 0 30px #0ff;
+  transition:.3s;
+}
+.cta:hover{transform:scale(1.1);box-shadow:0 0 60px #0ff}
+
+/* ===== SECTIONS ===== */
+section{
+  padding:120px 10%;
+}
+
+.title{
+  font-size:3rem;
+  margin-bottom:60px;
+  text-align:center;
+}
+
+/* ===== CARDS ===== */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+}
+
+.card{
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(20px);
+  border-radius:25px;
+  padding:40px;
+  border:1px solid rgba(255,255,255,0.1);
+  transition:.4s;
+  transform-style:preserve-3d;
+}
+
+.card:hover{
+  transform:rotateX(8deg) rotateY(-8deg) scale(1.05);
+  box-shadow:0 0 40px #0ff5;
+}
+
+/* ===== STATS ===== */
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:80px;
+  text-align:center;
+}
+.stat h2{font-size:3rem;color:#0ff}
+
+/* ===== FOOTER ===== */
+footer{
+  padding:60px;
+  text-align:center;
+  opacity:.5;
+}
+
+/* ===== SCROLL ANIM ===== */
+.reveal{
+  opacity:0;
+  transform:translateY(80px);
+  transition:1s cubic-bezier(.19,1,.22,1);
+}
+.reveal.show{
+  opacity:1;
+  transform:none;
+}
+</style>
+</head>
+<body>
+
+<div class="blob one"></div>
+<div class="blob two"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Future-Grade Automation</h1>
+  <p>Premium UI. Real-time systems. Neon-powered experience.</p>
+  <button class="cta">Launch Dashboard</button>
+</div>
+
+<!-- FEATURES -->
+<section>
+  <h2 class="title reveal">Core Features</h2>
+  <div class="cards">
+    <div class="card reveal">⚡ Lightning-fast systems</div>
+    <div class="card reveal">🎛 Animated dashboards</div>
+    <div class="card reveal">🎨 Neon UI themes</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section>
+  <h2 class="title reveal">Live Impact</h2>
+  <div class="stats">
+    <div class="stat reveal"><h2 data-count="4500">0</h2><p>Servers</p></div>
+    <div class="stat reveal"><h2 data-count="1200000">0</h2><p>Commands</p></div>
+    <div class="stat reveal"><h2 data-count="99">0</h2><p>Uptime %</p></div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Premium Systems
+</footer>
+
+<script>
+/* ===== REVEAL ON SCROLL ===== */
+const reveals=document.querySelectorAll(".reveal");
+
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add("show");
+    }
+  });
+},{threshold:.2});
+
+reveals.forEach(r=>io.observe(r));
+
+/* ===== COUNT UP ===== */
+document.querySelectorAll("[data-count]").forEach(el=>{
+  const target=+el.dataset.count;
+  let cur=0;
+  const inc=target/120;
+
+  function tick(){
+    cur+=inc;
+    if(cur<target){
+      el.innerText=Math.floor(cur);
+      requestAnimationFrame(tick);
+    }else{
+      el.innerText=target;
+    }
+  }
+  tick();
+});
+</script>
+
+</body>
+</html>
