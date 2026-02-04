@@ -2,377 +2,256 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ultra Premium About Me</title>
+<title>Rain Profile</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* ================= ROOT ================= */
 :root{
---bg:#050505;
---text:#fff;
---glass:rgba(255,255,255,.08);
---neon:#63ffff;
---violet:#a855f7;
-}
-
-body.light{
---bg:#f5f5f5;
---text:#111;
---glass:rgba(0,0,0,.06);
+  --bg:#0a0a0a;
+  --card:rgba(255,255,255,.08);
+  --text:#eee;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);overflow-x:hidden}
-
-/* ================= LOADER ================= */
-#loader{
-position:fixed;
-inset:0;
-background:black;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-#loader span{
-font-size:2rem;
-letter-spacing:6px;
-animation:pulse 1.2s infinite alternate;
-}
-@keyframes pulse{to{opacity:.4}}
-#loader.hide{opacity:0;pointer-events:none;transition:1s}
-
-/* ================= PROGRESS BAR ================= */
-#progress{
-position:fixed;
-top:0;left:0;
-height:3px;
-background:linear-gradient(90deg,var(--neon),var(--violet));
-width:0%;
-z-index:999;
+body{
+  background:var(--bg);
+  color:var(--text);
+  overflow:hidden;
 }
 
-/* ================= NAVBAR ================= */
-nav{
-position:fixed;
-top:20px;left:50%;
-transform:translateX(-50%);
-display:flex;
-gap:40px;
-padding:14px 40px;
-border-radius:60px;
-background:var(--glass);
-backdrop-filter:blur(20px);
-z-index:500;
-transition:.4s;
-}
-nav a{
-color:var(--text);
-text-decoration:none;
-font-weight:600;
-opacity:.8;
-}
-nav a:hover{color:var(--neon)}
-nav.hide{transform:translate(-50%,-120px)}
-
-/* ================= INDICATOR DOTS ================= */
-.dots{
-position:fixed;
-right:22px;
-top:50%;
-transform:translateY(-50%);
-display:flex;
-flex-direction:column;
-gap:18px;
-z-index:300;
-}
-.dots span{
-width:8px;height:8px;
-border-radius:50%;
-background:#555;
-cursor:pointer;
-transition:.3s;
-}
-.dots span.active{background:var(--neon);box-shadow:0 0 15px var(--neon)}
-
-/* ================= HERO ================= */
-.hero{
-position:relative;
-min-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:120px 20px;
-overflow:hidden;
+/* ===== CANVAS LAYERS ===== */
+#rain,#fog,#flash{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
 }
 
-.hero video{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-opacity:.25;
-z-index:-1;
+#rain{z-index:-3}
+#fog{z-index:-2}
+#flash{
+  z-index:-1;
+  background:white;
+  opacity:0;
+  transition:.3s;
 }
 
-.hero h1{
-font-size:clamp(3rem,7vw,6rem);
-background:linear-gradient(90deg,#fff,var(--neon),var(--violet));
-background-size:300%;
--webkit-background-clip:text;
-color:transparent;
-animation:shine 6s linear infinite;
-}
-@keyframes shine{to{background-position:300%}}
-
-.hero p{max-width:720px;margin-top:20px;opacity:.75}
-
-/* ================= AVATAR ================= */
-.avatar-wrap{
-position:relative;
-width:190px;height:190px;
-margin-bottom:40px;
-transform-style:preserve-3d;
-transition:.3s;
+/* grain overlay */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity:.06;
+  pointer-events:none;
+  z-index:10;
 }
 
-.avatar-wrap img{
-width:100%;height:100%;
-border-radius:50%;
-border:4px solid rgba(255,255,255,.25);
-box-shadow:0 0 50px var(--neon);
+/* ===== CENTER CARD ===== */
+.wrapper{
+  position:relative;
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.ring{
-position:absolute;
-inset:-22px;
-border-radius:50%;
-border:3px solid var(--neon);
-animation:spin 10s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ================= BUTTON ================= */
-.btn{
-margin-top:40px;
-padding:15px 46px;
-border-radius:60px;
-border:none;
-cursor:pointer;
-font-weight:700;
-background:var(--neon);
-box-shadow:0 0 50px var(--neon);
-transition:.3s;
-}
-.btn:hover{transform:scale(1.15)}
-
-/* ================= SECTIONS ================= */
-section{padding:140px 10%;min-height:100vh}
-h2{text-align:center;font-size:3rem;margin-bottom:70px}
-
-/* ================= GLASS ================= */
-.glass{
-background:var(--glass);
-backdrop-filter:blur(22px);
-border-radius:30px;
-padding:50px;
-border:1px solid rgba(255,255,255,.12);
+.card{
+  background:var(--card);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  padding:34px 38px;
+  width:420px;
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:26px;
+  animation:float 8s ease-in-out infinite;
+  box-shadow:0 0 80px rgba(0,0,0,.7);
 }
 
-/* ================= REVEAL ================= */
-.reveal{opacity:0;transform:translateY(80px);transition:1s}
-.reveal.show{opacity:1;transform:none}
-
-/* ================= SKILLS ================= */
-.skill{margin:25px 0}
-.bar{height:8px;background:#222;border-radius:20px;overflow:hidden}
-.fill{
-height:100%;width:0%;
-background:linear-gradient(90deg,var(--neon),var(--violet));
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-14px)}
 }
 
-/* ================= PORTFOLIO ================= */
-.slider{
-display:flex;
-gap:30px;
-overflow:hidden;
-}
-.slide{
-min-width:300px;
-background:var(--glass);
-padding:40px;
-border-radius:25px;
+.avatar{
+  width:140px;
+  height:140px;
+  border-radius:16px;
+  object-fit:cover;
+  filter:grayscale(1);
 }
 
-/* ================= TIMELINE ================= */
-.timeline{border-left:3px solid var(--neon);padding-left:40px}
-.time{margin:40px 0}
-
-/* ================= CONTACT ================= */
-form{
-max-width:500px;
-margin:0 auto;
-display:flex;
-flex-direction:column;
-gap:18px;
+/* ===== TEXT ===== */
+h1{
+  font-size:1.6rem;
+  font-weight:800;
 }
-input,textarea{
-background:#111;border:none;color:white;
-padding:14px;border-radius:14px;
+.small{opacity:.65;font-size:.9rem;margin:6px 0}
+
+.bio{font-size:.95rem;opacity:.85}
+
+/* ===== SOCIAL ===== */
+.social{
+  margin-top:12px;
+  display:flex;
+  gap:16px;
 }
-input:focus,textarea:focus{outline:2px solid var(--neon)}
-
-/* ================= SOCIAL ================= */
-.bottom-social{
-position:fixed;
-bottom:22px;
-left:50%;
-transform:translateX(-50%);
-display:flex;
-gap:40px;
-transition:.4s;
-z-index:400;
+.social a{
+  color:white;
+  text-decoration:none;
+  font-size:.9rem;
+  opacity:.7;
+  position:relative;
 }
-.bottom-social.hide{opacity:0;transform:translate(-50%,40px)}
-
-.social-link{
-width:28px;height:28px;
-color:var(--text);
-transition:.3s;
+.social a::after{
+  content:"";
+  position:absolute;
+  left:0;bottom:-4px;
+  width:0%;
+  height:1px;
+  background:white;
+  transition:.3s;
 }
-.social-link:hover{color:var(--neon);transform:translateY(-6px)}
+.social a:hover{opacity:1}
+.social a:hover::after{width:100%}
 
-.social-link svg{fill:currentColor}
+/* ===== LIGHTNING ===== */
+.flash.on{opacity:.18}
 
-/* ================= FOOTER ================= */
-footer{text-align:center;padding:60px;opacity:.4}
+/* ===== RESPONSIVE ===== */
+@media(max-width:520px){
+  .card{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  .avatar{margin:auto}
+}
 </style>
 </head>
 
 <body>
 
-<div id="loader"><span>LOADING</span></div>
-<div id="progress"></div>
+<!-- EFFECT LAYERS -->
+<canvas id="rain"></canvas>
+<canvas id="fog"></canvas>
+<div id="flash"></div>
 
-<nav id="nav">
-<a href="#hero">Home</a>
-<a href="#about">About</a>
-<a href="#portfolio">Work</a>
-<a href="#contact">Contact</a>
-</nav>
+<div class="wrapper">
 
-<div class="dots">
-<span data-target="hero"></span>
-<span data-target="about"></span>
-<span data-target="portfolio"></span>
-<span data-target="contact"></span>
-</div>
+  <!-- PROFILE CARD -->
+  <div class="card">
+    <img src="profile.gif" class="avatar">
 
-<!-- ================= HERO ================= -->
-<section id="hero" class="hero">
+    <div>
+      <h1>Your Name</h1>
+      <div class="small">Creative Developer • Gamer</div>
+      <p class="bio">
+        Building cinematic web experiences and immersive digital identities.
+      </p>
 
-<video autoplay muted loop>
-<source src="hero.mp4" type="video/mp4">
-</video>
+      <div class="social">
+        <a href="#">Instagram</a>
+        <a href="#">Discord</a>
+      </div>
+    </div>
+  </div>
 
-<div class="avatar-wrap" id="avatar">
-<img src="profile.gif">
-<span class="ring"></span>
-</div>
-
-<h1>Digital Architect of the Future</h1>
-<p>Immersive UI • Premium Motion • Automation Systems</p>
-
-<button class="btn">Explore</button>
-</section>
-
-<!-- ================= ABOUT ================= -->
-<section id="about">
-<h2 class="reveal">About Me</h2>
-<div class="glass reveal">
-Creative developer obsessed with futuristic experiences.
-</div>
-</section>
-
-<!-- ================= PORTFOLIO ================= -->
-<section id="portfolio">
-<h2 class="reveal">Portfolio</h2>
-<div class="slider reveal" id="slider">
-<div class="slide">Dashboard Platform</div>
-<div class="slide">Automation Engine</div>
-<div class="slide">3D UI System</div>
-</div>
-</section>
-
-<!-- ================= CONTACT ================= -->
-<section id="contact">
-<h2 class="reveal">Contact Me</h2>
-<div class="glass reveal">
-<form>
-<input placeholder="Name">
-<input placeholder="Email">
-<textarea rows="4" placeholder="Message"></textarea>
-<button class="btn">Send</button>
-</form>
-</div>
-</section>
-
-<footer>© 2026 Premium Identity</footer>
-
-<!-- SOCIAL -->
-<div class="bottom-social" id="social">
-<a class="social-link" href="#"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z"/></svg></a>
-<a class="social-link" href="#"><svg viewBox="0 0 24 24"><path d="M20 4C17 3 15 3 12 3s-5 0-8 1C1 7 0 11 0 15s5 6 12 6 12-2 12-6-1-8-4-11z"/></svg></a>
 </div>
 
 <script>
-/* LOADER */
-window.onload=()=>setTimeout(()=>loader.classList.add("hide"),1200);
+/* ================= RAIN ================= */
 
-/* PROGRESS BAR */
-window.addEventListener("scroll",()=>{
-let h=document.documentElement;
-progress.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100+"%";
-});
+const rain = document.getElementById("rain");
+const rctx = rain.getContext("2d");
 
-/* NAV + SOCIAL AUTO HIDE */
-let last=0;
-window.addEventListener("scroll",()=>{
-let y=window.scrollY;
-nav.classList.toggle("hide",y>last);
-social.classList.toggle("hide",y>last);
-last=y;
-});
-
-/* 3D AVATAR */
-const avatar=document.getElementById("avatar");
-avatar.addEventListener("mousemove",e=>{
-let r=avatar.getBoundingClientRect();
-let x=(e.clientX-r.left)/r.width-.5;
-let y=(e.clientY-r.top)/r.height-.5;
-avatar.style.transform=`rotateX(${-y*20}deg) rotateY(${x*20}deg)`;
-});
-avatar.addEventListener("mouseleave",()=>avatar.style.transform="");
-
-/* REVEAL */
-const io=new IntersectionObserver(es=>{
-es.forEach(e=>e.isIntersecting&&e.target.classList.add("show"));
-},{threshold:.3});
-document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-
-/* AUTO SLIDER */
-setInterval(()=>{
-slider.scrollLeft+=320;
-if(slider.scrollLeft>=slider.scrollWidth-slider.clientWidth){
-slider.scrollLeft=0;
+let w,h;
+function resize(){
+  w = rain.width = window.innerWidth;
+  h = rain.height = window.innerHeight;
 }
-},2500);
+resize();
+window.addEventListener("resize",resize);
+
+const drops=[];
+for(let i=0;i<320;i++){
+  drops.push({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    l:10+Math.random()*25,
+    s:4+Math.random()*10,
+    w:-1.5,
+    a:.15+Math.random()*.35
+  });
+}
+
+function rainLoop(){
+  rctx.clearRect(0,0,w,h);
+  for(const d of drops){
+    rctx.strokeStyle=`rgba(200,200,200,${d.a})`;
+    rctx.beginPath();
+    rctx.moveTo(d.x,d.y);
+    rctx.lineTo(d.x+d.w*4,d.y+d.l);
+    rctx.stroke();
+
+    d.x+=d.w;
+    d.y+=d.s;
+    if(d.y>h){
+      d.y=-20;
+      d.x=Math.random()*w;
+    }
+  }
+  requestAnimationFrame(rainLoop);
+}
+rainLoop();
+
+/* ================= FOG ================= */
+
+const fog = document.getElementById("fog");
+const fctx = fog.getContext("2d");
+
+fog.width=w; fog.height=h;
+
+const fogs=[];
+for(let i=0;i<22;i++){
+  fogs.push({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    r:200+Math.random()*320,
+    a:.02+Math.random()*.04,
+    s:.1+Math.random()*.3
+  });
+}
+
+function fogLoop(){
+  fctx.clearRect(0,0,w,h);
+  for(const f of fogs){
+    const g=fctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);
+    g.addColorStop(0,`rgba(255,255,255,${f.a})`);
+    g.addColorStop(1,"transparent");
+    fctx.fillStyle=g;
+    fctx.beginPath();
+    fctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+    fctx.fill();
+    f.x+=f.s;
+    if(f.x>w+200)f.x=-200;
+  }
+  requestAnimationFrame(fogLoop);
+}
+fogLoop();
+
+/* ================= LIGHTNING ================= */
+
+const flash=document.getElementById("flash");
+
+setInterval(()=>{
+  if(Math.random()<.25){
+    flash.classList.add("on");
+    setTimeout(()=>flash.classList.remove("on"),120);
+  }
+},3800);
 </script>
 
 </body>
