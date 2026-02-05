@@ -3,167 +3,156 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Premium Animated Site</title>
+<title>My Profile — Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --bg:#05050a;
-  --neon:#7cfffe;
+  --neon:#6bfff5;
   --pink:#ff4fd8;
-  --glass:rgba(255,255,255,0.08);
+  --glass:rgba(255,255,255,.09);
 }
 
-* {
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Orbitron',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+body{background:var(--bg);color:white;overflow-x:hidden;}
+html{scroll-behavior:smooth}
 
-body {
-  background:var(--bg);
-  color:white;
-  overflow-x:hidden;
-}
-
-/* ===== Smooth Scroll ===== */
-html {
-  scroll-behavior:smooth;
-}
-
-/* ===== Rain Canvas ===== */
-#rain {
-  position:fixed;
-  inset:0;
-  z-index:-2;
-}
+/* ===== Canvas BG ===== */
+#rain{position:fixed;inset:0;z-index:-3}
 
 /* ===== Cursor Glow ===== */
-.cursor {
-  position:fixed;
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:radial-gradient(circle,var(--neon),transparent 70%);
-  pointer-events:none;
-  mix-blend-mode:screen;
-  transform:translate(-50%,-50%);
-  z-index:9999;
+.cursor{
+ position:fixed;
+ width:40px;height:40px;
+ border-radius:50%;
+ background:radial-gradient(circle,var(--neon),transparent 70%);
+ pointer-events:none;
+ mix-blend-mode:screen;
+ z-index:9999;
+ transform:translate(-50%,-50%);
 }
 
-/* ===== Floating Shapes ===== */
-.shape {
-  position:absolute;
-  border-radius:50%;
-  filter:blur(40px);
-  opacity:.5;
-  animation:float 20s linear infinite;
+/* ===== Floating blobs ===== */
+.blob{
+ position:absolute;
+ border-radius:50%;
+ filter:blur(60px);
+ opacity:.5;
+ animation:float 18s linear infinite;
+}
+.blob.one{width:240px;height:240px;background:var(--neon);top:10%;left:10%}
+.blob.two{width:300px;height:300px;background:var(--pink);bottom:20%;right:8%}
+
+@keyframes float{
+ 0%{transform:translateY(0)}
+ 50%{transform:translateY(-80px)}
+ 100%{transform:translateY(0)}
 }
 
-.shape.one {background:var(--neon); width:200px;height:200px; top:10%; left:10%;}
-.shape.two {background:var(--pink); width:300px;height:300px; bottom:20%; right:5%;}
-
-@keyframes float {
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-80px)}
-  100%{transform:translateY(0)}
+/* ===== HERO ===== */
+.hero{
+ min-height:100vh;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ gap:25px;
+ text-align:center;
 }
 
-/* ===== Hero ===== */
-.hero {
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  gap:25px;
+.hero h1{
+ font-size:clamp(3rem,7vw,6rem);
+ background:linear-gradient(90deg,var(--neon),var(--pink),white);
+ background-size:300%;
+ -webkit-background-clip:text;
+ color:transparent;
+ animation:gradient 6s linear infinite;
 }
 
-.hero h1 {
-  font-size:clamp(3rem,7vw,6rem);
-  background:linear-gradient(90deg,var(--neon),var(--pink),white);
-  background-size:300%;
-  -webkit-background-clip:text;
-  color:transparent;
-  animation:gradient 6s infinite linear;
+@keyframes gradient{
+ 0%{background-position:0%}
+ 100%{background-position:300%}
 }
 
-@keyframes gradient {
-  0%{background-position:0%}
-  100%{background-position:300%}
+.hero span{opacity:.8;font-size:1.2rem}
+
+.hero button{
+ padding:16px 42px;
+ border:none;
+ border-radius:40px;
+ background:linear-gradient(135deg,var(--neon),var(--pink));
+ color:black;
+ cursor:pointer;
+ box-shadow:0 0 30px var(--neon);
+ transition:.4s;
 }
 
-.hero p {
-  max-width:600px;
-  opacity:.8;
-}
-
-.hero button {
-  padding:15px 40px;
-  border:none;
-  background:linear-gradient(135deg,var(--neon),var(--pink));
-  color:black;
-  border-radius:30px;
-  font-size:1rem;
-  cursor:pointer;
-  box-shadow:0 0 30px var(--neon);
-  transition:.4s;
-}
-
-.hero button:hover {
-  transform:scale(1.1);
-  box-shadow:0 0 60px var(--pink);
+.hero button:hover{
+ transform:scale(1.1);
+ box-shadow:0 0 70px var(--pink);
 }
 
 /* ===== Sections ===== */
-section {
-  padding:120px 10%;
+section{padding:120px 10%}
+h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
+
+/* ===== Glass Cards ===== */
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+ gap:40px;
 }
 
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:40px;
+.card{
+ background:var(--glass);
+ backdrop-filter:blur(20px);
+ padding:40px;
+ border-radius:25px;
+ box-shadow:0 0 40px rgba(0,0,0,.6);
+ opacity:0;
+ transform:translateY(60px);
+ transition:.9s ease;
 }
 
-.card {
-  background:var(--glass);
-  backdrop-filter:blur(20px);
-  border-radius:25px;
-  padding:40px;
-  box-shadow:0 0 30px rgba(0,0,0,.6);
-  opacity:0;
-  transform:translateY(60px);
-  transition:.8s ease;
+.card.show{opacity:1;transform:none}
+
+.card:hover{
+ transform:translateY(-12px) scale(1.03);
+ box-shadow:0 0 45px var(--neon);
 }
 
-.card.show {
-  opacity:1;
-  transform:none;
+/* ===== Social ===== */
+.socials{
+ display:flex;
+ justify-content:center;
+ gap:25px;
 }
 
-.card:hover {
-  box-shadow:0 0 40px var(--neon);
-  transform:translateY(-10px) scale(1.03);
+.socials a{
+ text-decoration:none;
+ padding:18px 26px;
+ border-radius:50px;
+ color:white;
+ border:1px solid rgba(255,255,255,.15);
+ transition:.4s;
+}
+
+.socials a:hover{
+ background:linear-gradient(135deg,var(--neon),var(--pink));
+ color:black;
+ box-shadow:0 0 40px var(--neon);
 }
 
 /* ===== Footer ===== */
-footer {
-  padding:60px;
-  text-align:center;
-  opacity:.7;
-}
+footer{text-align:center;padding:60px;opacity:.6}
 
 /* ===== Scrollbar ===== */
-::-webkit-scrollbar {
-  width:8px;
-}
-::-webkit-scrollbar-thumb {
-  background:linear-gradient(var(--neon),var(--pink));
-  border-radius:20px;
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-thumb{
+ background:linear-gradient(var(--neon),var(--pink));
+ border-radius:20px;
 }
 </style>
 </head>
@@ -173,42 +162,73 @@ footer {
 <canvas id="rain"></canvas>
 <div class="cursor"></div>
 
-<div class="shape one"></div>
-<div class="shape two"></div>
+<div class="blob one"></div>
+<div class="blob two"></div>
 
 <!-- ===== HERO ===== -->
 <div class="hero">
-  <h1>PREMIUM EXPERIENCE</h1>
-  <p>Ultra-modern animated website with neon effects, glass UI and cinematic motion.</p>
-  <button onclick="document.querySelector('#features').scrollIntoView()">Explore</button>
+ <h1>Hi, I'm <br><strong>YOUR NAME</strong></h1>
+ <span>Developer • Designer • Creator</span>
+ <button onclick="document.querySelector('#about').scrollIntoView()">About Me</button>
 </div>
 
-<!-- ===== FEATURES ===== -->
-<section id="features">
-<h2>Features</h2>
+<!-- ===== ABOUT ===== -->
+<section id="about">
+<h2>About Me</h2>
 <div class="grid">
-  <div class="card">⚡ Smooth Motion Scroll</div>
-  <div class="card">💎 Glassmorphism UI</div>
-  <div class="card">🌧️ Rain Particle System</div>
-  <div class="card">✨ Neon Glow</div>
-  <div class="card">🎯 Cursor Effects</div>
-  <div class="card">🔥 Scroll Animations</div>
+ <div class="card">
+  Passionate about building futuristic web experiences and interactive UIs.
+  I focus on performance, animations, and modern design systems.
+ </div>
+</div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section>
+<h2>Skills</h2>
+<div class="grid">
+ <div class="card">HTML / CSS / JS</div>
+ <div class="card">UI Animation</div>
+ <div class="card">Backend APIs</div>
+ <div class="card">Discord Bots</div>
+ <div class="card">Game Mods</div>
+ <div class="card">Automation</div>
+</div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section>
+<h2>Projects</h2>
+<div class="grid">
+ <div class="card">🎵 Premium Discord Music Bot</div>
+ <div class="card">🌐 Animated Portfolio Website</div>
+ <div class="card">🎮 GTA SA Mods</div>
+</div>
+</section>
+
+<!-- ===== SOCIALS ===== -->
+<section>
+<h2>Connect</h2>
+<div class="socials">
+ <a href="#">Discord</a>
+ <a href="#">Instagram</a>
+ <a href="#">GitHub</a>
 </div>
 </section>
 
 <footer>
-© 2026 Premium UI Template
+© 2026 • Personal Profile
 </footer>
 
 <script>
-/* ===== Cursor ===== */
+/* Cursor Glow */
 const cursor=document.querySelector(".cursor");
 window.addEventListener("mousemove",e=>{
  cursor.style.left=e.clientX+"px";
  cursor.style.top=e.clientY+"px";
 });
 
-/* ===== Rain Effect ===== */
+/* Rain Particles */
 const canvas=document.getElementById("rain");
 const ctx=canvas.getContext("2d");
 
@@ -217,46 +237,41 @@ function resize(){
  canvas.height=innerHeight;
 }
 resize();
-window.addEventListener("resize",resize);
+addEventListener("resize",resize);
 
-let drops=Array.from({length:200},()=>({
- x:Math.random()*canvas.width,
- y:Math.random()*canvas.height,
+let drops=Array.from({length:220},()=>({
+ x:Math.random()*innerWidth,
+ y:Math.random()*innerHeight,
  l:Math.random()*20+10,
  s:Math.random()*4+4
 }));
 
-function rain(){
+function animateRain(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
  ctx.strokeStyle="rgba(124,255,254,.4)";
- ctx.lineWidth=1;
  drops.forEach(d=>{
-   ctx.beginPath();
-   ctx.moveTo(d.x,d.y);
-   ctx.lineTo(d.x,d.y+d.l);
-   ctx.stroke();
-   d.y+=d.s;
-   if(d.y>canvas.height){
-     d.y=0;
-     d.x=Math.random()*canvas.width;
-   }
+  ctx.beginPath();
+  ctx.moveTo(d.x,d.y);
+  ctx.lineTo(d.x,d.y+d.l);
+  ctx.stroke();
+  d.y+=d.s;
+  if(d.y>canvas.height){
+    d.y=0;
+    d.x=Math.random()*canvas.width;
+  }
  });
- requestAnimationFrame(rain);
+ requestAnimationFrame(animateRain);
 }
-rain();
+animateRain();
 
-/* ===== Scroll Reveal ===== */
+/* Scroll Reveal */
 const cards=document.querySelectorAll(".card");
-
-const obs=new IntersectionObserver(entries=>{
+const observer=new IntersectionObserver(entries=>{
  entries.forEach(e=>{
-   if(e.isIntersecting){
-     e.target.classList.add("show");
-   }
+  if(e.isIntersecting)e.target.classList.add("show");
  });
 },{threshold:.3});
-
-cards.forEach(c=>obs.observe(c));
+cards.forEach(c=>observer.observe(c));
 </script>
 
 </body>
