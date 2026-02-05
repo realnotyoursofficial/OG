@@ -3,51 +3,55 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>My Profile — Premium</title>
+<title>My Profile — Black Edition</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg:#05050a;
-  --neon:#6bfff5;
-  --pink:#ff4fd8;
-  --glass:rgba(255,255,255,.09);
+  --bg:#000;
+  --white:#fff;
+  --glass:rgba(255,255,255,.07);
+  --glow:rgba(255,255,255,.35);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:var(--bg);color:white;overflow-x:hidden;}
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:'Orbitron',sans-serif;
+}
+
 html{scroll-behavior:smooth}
 
-/* ===== Canvas BG ===== */
-#rain{position:fixed;inset:0;z-index:-3}
-
-/* ===== Cursor Glow ===== */
-.cursor{
- position:fixed;
- width:40px;height:40px;
- border-radius:50%;
- background:radial-gradient(circle,var(--neon),transparent 70%);
- pointer-events:none;
- mix-blend-mode:screen;
- z-index:9999;
- transform:translate(-50%,-50%);
+body{
+ background:var(--bg);
+ color:var(--white);
+ overflow-x:hidden;
 }
 
-/* ===== Floating blobs ===== */
-.blob{
+/* ===== Background Canvas ===== */
+#particles{
+ position:fixed;
+ inset:0;
+ z-index:-4;
+}
+
+/* ===== Floating Mist ===== */
+.mist{
  position:absolute;
  border-radius:50%;
- filter:blur(60px);
- opacity:.5;
+ filter:blur(70px);
+ opacity:.3;
  animation:float 18s linear infinite;
 }
-.blob.one{width:240px;height:240px;background:var(--neon);top:10%;left:10%}
-.blob.two{width:300px;height:300px;background:var(--pink);bottom:20%;right:8%}
+
+.mist.one{width:260px;height:260px;background:white;top:10%;left:10%}
+.mist.two{width:320px;height:320px;background:white;bottom:20%;right:6%}
 
 @keyframes float{
  0%{transform:translateY(0)}
- 50%{transform:translateY(-80px)}
+ 50%{transform:translateY(-90px)}
  100%{transform:translateY(0)}
 }
 
@@ -58,13 +62,13 @@ html{scroll-behavior:smooth}
  flex-direction:column;
  justify-content:center;
  align-items:center;
- gap:25px;
  text-align:center;
+ gap:25px;
 }
 
 .hero h1{
  font-size:clamp(3rem,7vw,6rem);
- background:linear-gradient(90deg,var(--neon),var(--pink),white);
+ background:linear-gradient(90deg,#fff,#888,#fff);
  background-size:300%;
  -webkit-background-clip:text;
  color:transparent;
@@ -76,27 +80,37 @@ html{scroll-behavior:smooth}
  100%{background-position:300%}
 }
 
-.hero span{opacity:.8;font-size:1.2rem}
+.hero span{
+ opacity:.75;
+ font-size:1.2rem;
+}
 
 .hero button{
- padding:16px 42px;
+ padding:16px 44px;
  border:none;
- border-radius:40px;
- background:linear-gradient(135deg,var(--neon),var(--pink));
+ border-radius:50px;
+ background:white;
  color:black;
  cursor:pointer;
- box-shadow:0 0 30px var(--neon);
+ box-shadow:0 0 40px var(--glow);
  transition:.4s;
 }
 
 .hero button:hover{
  transform:scale(1.1);
- box-shadow:0 0 70px var(--pink);
+ box-shadow:0 0 80px white;
 }
 
 /* ===== Sections ===== */
-section{padding:120px 10%}
-h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
+section{
+ padding:120px 10%;
+}
+
+h2{
+ text-align:center;
+ font-size:2.6rem;
+ margin-bottom:60px;
+}
 
 /* ===== Glass Cards ===== */
 .grid{
@@ -107,20 +121,23 @@ h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
 
 .card{
  background:var(--glass);
- backdrop-filter:blur(20px);
- padding:40px;
- border-radius:25px;
- box-shadow:0 0 40px rgba(0,0,0,.6);
+ backdrop-filter:blur(22px);
+ padding:42px;
+ border-radius:26px;
+ box-shadow:0 0 40px rgba(255,255,255,.05);
  opacity:0;
  transform:translateY(60px);
  transition:.9s ease;
 }
 
-.card.show{opacity:1;transform:none}
+.card.show{
+ opacity:1;
+ transform:none;
+}
 
 .card:hover{
- transform:translateY(-12px) scale(1.03);
- box-shadow:0 0 45px var(--neon);
+ transform:translateY(-14px) scale(1.03);
+ box-shadow:0 0 55px var(--glow);
 }
 
 /* ===== Social ===== */
@@ -132,26 +149,30 @@ h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
 
 .socials a{
  text-decoration:none;
- padding:18px 26px;
+ padding:18px 30px;
  border-radius:50px;
  color:white;
- border:1px solid rgba(255,255,255,.15);
+ border:1px solid rgba(255,255,255,.2);
  transition:.4s;
 }
 
 .socials a:hover{
- background:linear-gradient(135deg,var(--neon),var(--pink));
+ background:white;
  color:black;
- box-shadow:0 0 40px var(--neon);
+ box-shadow:0 0 50px white;
 }
 
 /* ===== Footer ===== */
-footer{text-align:center;padding:60px;opacity:.6}
+footer{
+ text-align:center;
+ padding:60px;
+ opacity:.6;
+}
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-thumb{
- background:linear-gradient(var(--neon),var(--pink));
+ background:white;
  border-radius:20px;
 }
 </style>
@@ -159,16 +180,15 @@ footer{text-align:center;padding:60px;opacity:.6}
 
 <body>
 
-<canvas id="rain"></canvas>
-<div class="cursor"></div>
+<canvas id="particles"></canvas>
 
-<div class="blob one"></div>
-<div class="blob two"></div>
+<div class="mist one"></div>
+<div class="mist two"></div>
 
 <!-- ===== HERO ===== -->
 <div class="hero">
  <h1>Hi, I'm <br><strong>YOUR NAME</strong></h1>
- <span>Developer • Designer • Creator</span>
+ <span>Creative Developer • Designer</span>
  <button onclick="document.querySelector('#about').scrollIntoView()">About Me</button>
 </div>
 
@@ -177,8 +197,8 @@ footer{text-align:center;padding:60px;opacity:.6}
 <h2>About Me</h2>
 <div class="grid">
  <div class="card">
-  Passionate about building futuristic web experiences and interactive UIs.
-  I focus on performance, animations, and modern design systems.
+  I build cinematic black-and-white interfaces with motion, depth,
+  and modern interaction patterns.
  </div>
 </div>
 </section>
@@ -187,12 +207,12 @@ footer{text-align:center;padding:60px;opacity:.6}
 <section>
 <h2>Skills</h2>
 <div class="grid">
- <div class="card">HTML / CSS / JS</div>
- <div class="card">UI Animation</div>
- <div class="card">Backend APIs</div>
- <div class="card">Discord Bots</div>
- <div class="card">Game Mods</div>
+ <div class="card">Web Animation</div>
+ <div class="card">JavaScript</div>
+ <div class="card">UI Systems</div>
  <div class="card">Automation</div>
+ <div class="card">Bots</div>
+ <div class="card">Game Mods</div>
 </div>
 </section>
 
@@ -200,13 +220,13 @@ footer{text-align:center;padding:60px;opacity:.6}
 <section>
 <h2>Projects</h2>
 <div class="grid">
- <div class="card">🎵 Premium Discord Music Bot</div>
- <div class="card">🌐 Animated Portfolio Website</div>
- <div class="card">🎮 GTA SA Mods</div>
+ <div class="card">Premium Discord Bot</div>
+ <div class="card">Animated Portfolio</div>
+ <div class="card">Game Modding</div>
 </div>
 </section>
 
-<!-- ===== SOCIALS ===== -->
+<!-- ===== CONNECT ===== -->
 <section>
 <h2>Connect</h2>
 <div class="socials">
@@ -217,19 +237,12 @@ footer{text-align:center;padding:60px;opacity:.6}
 </section>
 
 <footer>
-© 2026 • Personal Profile
+© 2026 • Black Edition Portfolio
 </footer>
 
 <script>
-/* Cursor Glow */
-const cursor=document.querySelector(".cursor");
-window.addEventListener("mousemove",e=>{
- cursor.style.left=e.clientX+"px";
- cursor.style.top=e.clientY+"px";
-});
-
-/* Rain Particles */
-const canvas=document.getElementById("rain");
+/* Particle Fog */
+const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
 function resize(){
@@ -239,30 +252,29 @@ function resize(){
 resize();
 addEventListener("resize",resize);
 
-let drops=Array.from({length:220},()=>({
+let dots=Array.from({length:140},()=>({
  x:Math.random()*innerWidth,
  y:Math.random()*innerHeight,
- l:Math.random()*20+10,
- s:Math.random()*4+4
+ r:Math.random()*2+1,
+ s:Math.random()*0.3+0.2
 }));
 
-function animateRain(){
+function animate(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.strokeStyle="rgba(124,255,254,.4)";
- drops.forEach(d=>{
+ ctx.fillStyle="rgba(255,255,255,.5)";
+ dots.forEach(d=>{
   ctx.beginPath();
-  ctx.moveTo(d.x,d.y);
-  ctx.lineTo(d.x,d.y+d.l);
-  ctx.stroke();
+  ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+  ctx.fill();
   d.y+=d.s;
   if(d.y>canvas.height){
     d.y=0;
     d.x=Math.random()*canvas.width;
   }
  });
- requestAnimationFrame(animateRain);
+ requestAnimationFrame(animate);
 }
-animateRain();
+animate();
 
 /* Scroll Reveal */
 const cards=document.querySelectorAll(".card");
@@ -270,7 +282,8 @@ const observer=new IntersectionObserver(entries=>{
  entries.forEach(e=>{
   if(e.isIntersecting)e.target.classList.add("show");
  });
-},{threshold:.3});
+},{threshold:.25});
+
 cards.forEach(c=>observer.observe(c));
 </script>
 
