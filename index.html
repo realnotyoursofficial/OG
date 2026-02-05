@@ -15,37 +15,55 @@
   --glow:rgba(255,255,255,.35);
 }
 
-*{
- margin:0;
- padding:0;
- box-sizing:border-box;
- font-family:'Orbitron',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 
 html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);overflow-x:hidden}
 
-body{
- background:var(--bg);
- color:var(--white);
- overflow-x:hidden;
-}
-
-/* ===== Background Canvas ===== */
-#particles{
+/* ================= NAV / LOGO ================= */
+.navbar{
  position:fixed;
- inset:0;
- z-index:-4;
+ top:20px;
+ left:20px;
+ right:20px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ z-index:1000;
+ pointer-events:auto;
 }
 
-/* ===== Floating Mist ===== */
+.brand{
+ display:flex;
+ align-items:center;
+ gap:14px;
+ text-decoration:none;
+ color:white;
+}
+
+.brand img{
+ width:48px;
+ height:48px;
+ object-fit:contain;
+ filter:invert(1);
+}
+
+.brand span{
+ font-weight:700;
+ letter-spacing:2px;
+}
+
+/* ================= Background Canvas ================= */
+#particles{position:fixed;inset:0;z-index:-4}
+
+/* ================= Floating Mist ================= */
 .mist{
  position:absolute;
  border-radius:50%;
  filter:blur(70px);
- opacity:.3;
+ opacity:.25;
  animation:float 18s linear infinite;
 }
-
 .mist.one{width:260px;height:260px;background:white;top:10%;left:10%}
 .mist.two{width:320px;height:320px;background:white;bottom:20%;right:6%}
 
@@ -55,7 +73,7 @@ body{
  100%{transform:translateY(0)}
 }
 
-/* ===== HERO ===== */
+/* ================= HERO ================= */
 .hero{
  min-height:100vh;
  display:flex;
@@ -81,38 +99,28 @@ body{
 }
 
 .hero span{
- opacity:.75;
- font-size:1.2rem;
+ opacity:.8;
+ font-size:1.25rem;
+ min-height:28px;
 }
 
-.hero button{
- padding:16px 44px;
- border:none;
- border-radius:50px;
+.divider{
+ width:0;
+ height:1px;
  background:white;
- color:black;
- cursor:pointer;
- box-shadow:0 0 40px var(--glow);
- transition:.4s;
+ opacity:.5;
+ animation:lineGrow 2.5s ease forwards;
 }
 
-.hero button:hover{
- transform:scale(1.1);
- box-shadow:0 0 80px white;
+@keyframes lineGrow{
+ to{width:220px}
 }
 
-/* ===== Sections ===== */
-section{
- padding:120px 10%;
-}
+/* ================= Sections ================= */
+section{padding:120px 10%}
+h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
 
-h2{
- text-align:center;
- font-size:2.6rem;
- margin-bottom:60px;
-}
-
-/* ===== Glass Cards ===== */
+/* ================= Cards ================= */
 .grid{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -130,17 +138,14 @@ h2{
  transition:.9s ease;
 }
 
-.card.show{
- opacity:1;
- transform:none;
-}
+.card.show{opacity:1;transform:none}
 
 .card:hover{
  transform:translateY(-14px) scale(1.03);
  box-shadow:0 0 55px var(--glow);
 }
 
-/* ===== Social ===== */
+/* ================= Social ================= */
 .socials{
  display:flex;
  justify-content:center;
@@ -162,48 +167,49 @@ h2{
  box-shadow:0 0 50px white;
 }
 
-/* ===== Footer ===== */
-footer{
- text-align:center;
- padding:60px;
- opacity:.6;
-}
+/* ================= Footer ================= */
+footer{text-align:center;padding:60px;opacity:.6}
 
-/* ===== Scrollbar ===== */
+/* ================= Scrollbar ================= */
 ::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-thumb{
- background:white;
- border-radius:20px;
-}
+::-webkit-scrollbar-thumb{background:white;border-radius:20px}
 </style>
 </head>
 
 <body>
+
+<!-- ================= NAVBAR / LOGO ================= -->
+<div class="navbar">
+ <a class="brand" href="#">
+  <img src="logo.png" alt="Logo">
+  <span>MY BRAND</span>
+ </a>
+</div>
 
 <canvas id="particles"></canvas>
 
 <div class="mist one"></div>
 <div class="mist two"></div>
 
-<!-- ===== HERO ===== -->
+<!-- ================= HERO ================= -->
 <div class="hero">
  <h1>Hi, I'm <br><strong>YOUR NAME</strong></h1>
- <span>Creative Developer • Designer</span>
- <button onclick="document.querySelector('#about').scrollIntoView()">About Me</button>
+ <span id="typing"></span>
+ <div class="divider"></div>
 </div>
 
-<!-- ===== ABOUT ===== -->
+<!-- ================= ABOUT ================= -->
 <section id="about">
 <h2>About Me</h2>
 <div class="grid">
  <div class="card">
-  I build cinematic black-and-white interfaces with motion, depth,
-  and modern interaction patterns.
+  I design cinematic black-and-white web experiences with motion,
+  clarity, and technical polish.
  </div>
 </div>
 </section>
 
-<!-- ===== SKILLS ===== -->
+<!-- ================= SKILLS ================= -->
 <section>
 <h2>Skills</h2>
 <div class="grid">
@@ -216,23 +222,12 @@ footer{
 </div>
 </section>
 
-<!-- ===== PROJECTS ===== -->
-<section>
-<h2>Projects</h2>
-<div class="grid">
- <div class="card">Premium Discord Bot</div>
- <div class="card">Animated Portfolio</div>
- <div class="card">Game Modding</div>
-</div>
-</section>
-
-<!-- ===== CONNECT ===== -->
+<!-- ================= CONNECT ================= -->
 <section>
 <h2>Connect</h2>
 <div class="socials">
- <a href="#">Discord</a>
- <a href="#">Instagram</a>
- <a href="#">GitHub</a>
+ <a href="https://instagram.com/YOUR_ID" target="_blank">Instagram</a>
+ <a href="https://discord.gg/YOUR_INVITE" target="_blank">Discord</a>
 </div>
 </section>
 
@@ -241,7 +236,7 @@ footer{
 </footer>
 
 <script>
-/* Particle Fog */
+/* ================= Particle Fog ================= */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
@@ -252,16 +247,16 @@ function resize(){
 resize();
 addEventListener("resize",resize);
 
-let dots=Array.from({length:140},()=>({
+let dots=Array.from({length:130},()=>({
  x:Math.random()*innerWidth,
  y:Math.random()*innerHeight,
  r:Math.random()*2+1,
- s:Math.random()*0.3+0.2
+ s:Math.random()*0.25+0.15
 }));
 
 function animate(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle="rgba(255,255,255,.5)";
+ ctx.fillStyle="rgba(255,255,255,.45)";
  dots.forEach(d=>{
   ctx.beginPath();
   ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
@@ -276,15 +271,27 @@ function animate(){
 }
 animate();
 
-/* Scroll Reveal */
+/* ================= Scroll Reveal ================= */
 const cards=document.querySelectorAll(".card");
 const observer=new IntersectionObserver(entries=>{
  entries.forEach(e=>{
   if(e.isIntersecting)e.target.classList.add("show");
  });
 },{threshold:.25});
-
 cards.forEach(c=>observer.observe(c));
+
+/* ================= Typing Effect (Unique Touch) ================= */
+const text="Creative Developer • Designer • Builder";
+const el=document.getElementById("typing");
+let i=0;
+
+function type(){
+ if(i<=text.length){
+  el.textContent=text.slice(0,i++);
+  setTimeout(type,80);
+ }
+}
+type();
 </script>
 
 </body>
