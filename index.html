@@ -1,257 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Rain Profile</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Premium Animated Site</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#0a0a0a;
-  --card:rgba(255,255,255,.08);
-  --text:#eee;
+:root {
+  --bg:#05050a;
+  --neon:#7cfffe;
+  --pink:#ff4fd8;
+  --glass:rgba(255,255,255,0.08);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter}
-body{
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Orbitron',sans-serif;
+}
+
+body {
   background:var(--bg);
-  color:var(--text);
-  overflow:hidden;
+  color:white;
+  overflow-x:hidden;
 }
 
-/* ===== CANVAS LAYERS ===== */
-#rain,#fog,#flash{
+/* ===== Smooth Scroll ===== */
+html {
+  scroll-behavior:smooth;
+}
+
+/* ===== Rain Canvas ===== */
+#rain {
   position:fixed;
   inset:0;
-  pointer-events:none;
+  z-index:-2;
 }
 
-#rain{z-index:-3}
-#fog{z-index:-2}
-#flash{
-  z-index:-1;
-  background:white;
-  opacity:0;
-  transition:.3s;
-}
-
-/* grain overlay */
-body::after{
-  content:"";
+/* ===== Cursor Glow ===== */
+.cursor {
   position:fixed;
-  inset:0;
-  background:url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity:.06;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--neon),transparent 70%);
   pointer-events:none;
-  z-index:10;
+  mix-blend-mode:screen;
+  transform:translate(-50%,-50%);
+  z-index:9999;
 }
 
-/* ===== CENTER CARD ===== */
-.wrapper{
-  position:relative;
-  width:100%;
-  height:100vh;
+/* ===== Floating Shapes ===== */
+.shape {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:.5;
+  animation:float 20s linear infinite;
+}
+
+.shape.one {background:var(--neon); width:200px;height:200px; top:10%; left:10%;}
+.shape.two {background:var(--pink); width:300px;height:300px; bottom:20%; right:5%;}
+
+@keyframes float {
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-80px)}
+  100%{transform:translateY(0)}
+}
+
+/* ===== Hero ===== */
+.hero {
+  min-height:100vh;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
+  text-align:center;
+  gap:25px;
 }
 
-.card{
-  background:var(--card);
-  backdrop-filter:blur(18px);
-  border-radius:22px;
-  padding:34px 38px;
-  width:420px;
+.hero h1 {
+  font-size:clamp(3rem,7vw,6rem);
+  background:linear-gradient(90deg,var(--neon),var(--pink),white);
+  background-size:300%;
+  -webkit-background-clip:text;
+  color:transparent;
+  animation:gradient 6s infinite linear;
+}
+
+@keyframes gradient {
+  0%{background-position:0%}
+  100%{background-position:300%}
+}
+
+.hero p {
+  max-width:600px;
+  opacity:.8;
+}
+
+.hero button {
+  padding:15px 40px;
+  border:none;
+  background:linear-gradient(135deg,var(--neon),var(--pink));
+  color:black;
+  border-radius:30px;
+  font-size:1rem;
+  cursor:pointer;
+  box-shadow:0 0 30px var(--neon);
+  transition:.4s;
+}
+
+.hero button:hover {
+  transform:scale(1.1);
+  box-shadow:0 0 60px var(--pink);
+}
+
+/* ===== Sections ===== */
+section {
+  padding:120px 10%;
+}
+
+.grid {
   display:grid;
-  grid-template-columns:140px 1fr;
-  gap:26px;
-  animation:float 8s ease-in-out infinite;
-  box-shadow:0 0 80px rgba(0,0,0,.7);
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
 }
 
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-14px)}
+.card {
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  border-radius:25px;
+  padding:40px;
+  box-shadow:0 0 30px rgba(0,0,0,.6);
+  opacity:0;
+  transform:translateY(60px);
+  transition:.8s ease;
 }
 
-.avatar{
-  width:140px;
-  height:140px;
-  border-radius:16px;
-  object-fit:cover;
-  filter:grayscale(1);
+.card.show {
+  opacity:1;
+  transform:none;
 }
 
-/* ===== TEXT ===== */
-h1{
-  font-size:1.6rem;
-  font-weight:800;
+.card:hover {
+  box-shadow:0 0 40px var(--neon);
+  transform:translateY(-10px) scale(1.03);
 }
-.small{opacity:.65;font-size:.9rem;margin:6px 0}
 
-.bio{font-size:.95rem;opacity:.85}
-
-/* ===== SOCIAL ===== */
-.social{
-  margin-top:12px;
-  display:flex;
-  gap:16px;
-}
-.social a{
-  color:white;
-  text-decoration:none;
-  font-size:.9rem;
+/* ===== Footer ===== */
+footer {
+  padding:60px;
+  text-align:center;
   opacity:.7;
-  position:relative;
 }
-.social a::after{
-  content:"";
-  position:absolute;
-  left:0;bottom:-4px;
-  width:0%;
-  height:1px;
-  background:white;
-  transition:.3s;
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width:8px;
 }
-.social a:hover{opacity:1}
-.social a:hover::after{width:100%}
-
-/* ===== LIGHTNING ===== */
-.flash.on{opacity:.18}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:520px){
-  .card{
-    grid-template-columns:1fr;
-    text-align:center;
-  }
-  .avatar{margin:auto}
+::-webkit-scrollbar-thumb {
+  background:linear-gradient(var(--neon),var(--pink));
+  border-radius:20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- EFFECT LAYERS -->
 <canvas id="rain"></canvas>
-<canvas id="fog"></canvas>
-<div id="flash"></div>
+<div class="cursor"></div>
 
-<div class="wrapper">
+<div class="shape one"></div>
+<div class="shape two"></div>
 
-  <!-- PROFILE CARD -->
-  <div class="card">
-    <img src="profile.gif" class="avatar">
-
-    <div>
-      <h1>Your Name</h1>
-      <div class="small">Creative Developer • Gamer</div>
-      <p class="bio">
-        Building cinematic web experiences and immersive digital identities.
-      </p>
-
-      <div class="social">
-        <a href="#">Instagram</a>
-        <a href="#">Discord</a>
-      </div>
-    </div>
-  </div>
-
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <h1>PREMIUM EXPERIENCE</h1>
+  <p>Ultra-modern animated website with neon effects, glass UI and cinematic motion.</p>
+  <button onclick="document.querySelector('#features').scrollIntoView()">Explore</button>
 </div>
 
+<!-- ===== FEATURES ===== -->
+<section id="features">
+<h2>Features</h2>
+<div class="grid">
+  <div class="card">⚡ Smooth Motion Scroll</div>
+  <div class="card">💎 Glassmorphism UI</div>
+  <div class="card">🌧️ Rain Particle System</div>
+  <div class="card">✨ Neon Glow</div>
+  <div class="card">🎯 Cursor Effects</div>
+  <div class="card">🔥 Scroll Animations</div>
+</div>
+</section>
+
+<footer>
+© 2026 Premium UI Template
+</footer>
+
 <script>
-/* ================= RAIN ================= */
+/* ===== Cursor ===== */
+const cursor=document.querySelector(".cursor");
+window.addEventListener("mousemove",e=>{
+ cursor.style.left=e.clientX+"px";
+ cursor.style.top=e.clientY+"px";
+});
 
-const rain = document.getElementById("rain");
-const rctx = rain.getContext("2d");
+/* ===== Rain Effect ===== */
+const canvas=document.getElementById("rain");
+const ctx=canvas.getContext("2d");
 
-let w,h;
 function resize(){
-  w = rain.width = window.innerWidth;
-  h = rain.height = window.innerHeight;
+ canvas.width=innerWidth;
+ canvas.height=innerHeight;
 }
 resize();
 window.addEventListener("resize",resize);
 
-const drops=[];
-for(let i=0;i<320;i++){
-  drops.push({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    l:10+Math.random()*25,
-    s:4+Math.random()*10,
-    w:-1.5,
-    a:.15+Math.random()*.35
-  });
+let drops=Array.from({length:200},()=>({
+ x:Math.random()*canvas.width,
+ y:Math.random()*canvas.height,
+ l:Math.random()*20+10,
+ s:Math.random()*4+4
+}));
+
+function rain(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.strokeStyle="rgba(124,255,254,.4)";
+ ctx.lineWidth=1;
+ drops.forEach(d=>{
+   ctx.beginPath();
+   ctx.moveTo(d.x,d.y);
+   ctx.lineTo(d.x,d.y+d.l);
+   ctx.stroke();
+   d.y+=d.s;
+   if(d.y>canvas.height){
+     d.y=0;
+     d.x=Math.random()*canvas.width;
+   }
+ });
+ requestAnimationFrame(rain);
 }
+rain();
 
-function rainLoop(){
-  rctx.clearRect(0,0,w,h);
-  for(const d of drops){
-    rctx.strokeStyle=`rgba(200,200,200,${d.a})`;
-    rctx.beginPath();
-    rctx.moveTo(d.x,d.y);
-    rctx.lineTo(d.x+d.w*4,d.y+d.l);
-    rctx.stroke();
+/* ===== Scroll Reveal ===== */
+const cards=document.querySelectorAll(".card");
 
-    d.x+=d.w;
-    d.y+=d.s;
-    if(d.y>h){
-      d.y=-20;
-      d.x=Math.random()*w;
-    }
-  }
-  requestAnimationFrame(rainLoop);
-}
-rainLoop();
+const obs=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{
+   if(e.isIntersecting){
+     e.target.classList.add("show");
+   }
+ });
+},{threshold:.3});
 
-/* ================= FOG ================= */
-
-const fog = document.getElementById("fog");
-const fctx = fog.getContext("2d");
-
-fog.width=w; fog.height=h;
-
-const fogs=[];
-for(let i=0;i<22;i++){
-  fogs.push({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    r:200+Math.random()*320,
-    a:.02+Math.random()*.04,
-    s:.1+Math.random()*.3
-  });
-}
-
-function fogLoop(){
-  fctx.clearRect(0,0,w,h);
-  for(const f of fogs){
-    const g=fctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r);
-    g.addColorStop(0,`rgba(255,255,255,${f.a})`);
-    g.addColorStop(1,"transparent");
-    fctx.fillStyle=g;
-    fctx.beginPath();
-    fctx.arc(f.x,f.y,f.r,0,Math.PI*2);
-    fctx.fill();
-    f.x+=f.s;
-    if(f.x>w+200)f.x=-200;
-  }
-  requestAnimationFrame(fogLoop);
-}
-fogLoop();
-
-/* ================= LIGHTNING ================= */
-
-const flash=document.getElementById("flash");
-
-setInterval(()=>{
-  if(Math.random()<.25){
-    flash.classList.add("on");
-    setTimeout(()=>flash.classList.remove("on"),120);
-  }
-},3800);
+cards.forEach(c=>obs.observe(c));
 </script>
 
 </body>
