@@ -1,126 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>My Profile — Black Edition</title>
+<title>Black Signature Portfolio</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg:#000;
-  --white:#fff;
-  --glass:rgba(255,255,255,.07);
-  --glow:rgba(255,255,255,.35);
+:root{
+ --bg:#000;
+ --white:#fff;
+ --glass:rgba(255,255,255,.06);
+ --glow:rgba(255,255,255,.35);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);overflow-x:hidden}
+body{
+ background:var(--bg);
+ color:white;
+ overflow-x:hidden;
+}
 
-/* ================= NAV / LOGO ================= */
+/* ========== FILM GRAIN ========== */
+body::after{
+ content:"";
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ background:url("https://grainy-gradients.vercel.app/noise.svg");
+ opacity:.08;
+ z-index:9999;
+}
+
+/* ========== SCROLL BAR ========== */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-thumb{background:white;border-radius:20px}
+
+/* ========== PROGRESS BAR ========== */
+.progress{
+ position:fixed;
+ top:0;
+ left:0;
+ height:2px;
+ background:white;
+ width:0%;
+ z-index:99999;
+}
+
+/* ========== NAVBAR ========== */
 .navbar{
  position:fixed;
- top:20px;
- left:20px;
- right:20px;
+ top:18px;
+ left:50%;
+ transform:translateX(-50%);
+ width:90%;
+ max-width:1200px;
+ padding:14px 28px;
+ backdrop-filter:blur(20px);
+ background:rgba(0,0,0,.55);
+ border-radius:50px;
  display:flex;
  justify-content:space-between;
  align-items:center;
- z-index:1000;
- pointer-events:auto;
+ z-index:5000;
 }
 
 .brand{
  display:flex;
  align-items:center;
- gap:14px;
- text-decoration:none;
+ gap:12px;
  color:white;
-}
-
-.brand img{
- width:48px;
- height:48px;
- object-fit:contain;
- filter:invert(1);
-}
-
-.brand span{
- font-weight:700;
+ text-decoration:none;
  letter-spacing:2px;
 }
 
-/* ================= Background Canvas ================= */
-#particles{position:fixed;inset:0;z-index:-4}
-
-/* ================= Floating Mist ================= */
-.mist{
- position:absolute;
- border-radius:50%;
- filter:blur(70px);
- opacity:.25;
- animation:float 18s linear infinite;
-}
-.mist.one{width:260px;height:260px;background:white;top:10%;left:10%}
-.mist.two{width:320px;height:320px;background:white;bottom:20%;right:6%}
-
-@keyframes float{
- 0%{transform:translateY(0)}
- 50%{transform:translateY(-90px)}
- 100%{transform:translateY(0)}
+.brand img{
+ width:38px;
+ filter:invert(1);
 }
 
-/* ================= HERO ================= */
+/* ========== PARTICLES ========== */
+#particles{
+ position:fixed;
+ inset:0;
+ z-index:-5;
+}
+
+/* ========== HERO ========== */
 .hero{
  min-height:100vh;
  display:flex;
- flex-direction:column;
  justify-content:center;
  align-items:center;
- text-align:center;
+ flex-direction:column;
  gap:25px;
+ text-align:center;
 }
 
 .hero h1{
  font-size:clamp(3rem,7vw,6rem);
- background:linear-gradient(90deg,#fff,#888,#fff);
+ background:linear-gradient(90deg,#fff,#999,#fff);
  background-size:300%;
  -webkit-background-clip:text;
  color:transparent;
- animation:gradient 6s linear infinite;
+ animation:grad 7s linear infinite;
 }
 
-@keyframes gradient{
+@keyframes grad{
  0%{background-position:0%}
  100%{background-position:300%}
 }
 
-.hero span{
- opacity:.8;
- font-size:1.25rem;
- min-height:28px;
-}
+.tagline{opacity:.8;font-size:1.3rem;min-height:32px}
 
 .divider{
  width:0;
  height:1px;
  background:white;
  opacity:.5;
- animation:lineGrow 2.5s ease forwards;
+ animation:grow 2.5s forwards;
 }
 
-@keyframes lineGrow{
- to{width:220px}
+@keyframes grow{to{width:200px}}
+
+/* ========== SECTIONS ========== */
+section{padding:130px 10%}
+
+h2{text-align:center;font-size:2.7rem;margin-bottom:60px}
+
+/* ABOUT LOGO */
+.about-logo{
+ display:flex;
+ justify-content:center;
+ margin-bottom:25px;
 }
 
-/* ================= Sections ================= */
-section{padding:120px 10%}
-h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
+.about-logo img{
+ width:70px;
+ opacity:.85;
+ filter:invert(1);
+}
 
-/* ================= Cards ================= */
+/* ========== GRID / CARDS ========== */
 .grid{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -131,98 +155,108 @@ h2{text-align:center;font-size:2.6rem;margin-bottom:60px}
  background:var(--glass);
  backdrop-filter:blur(22px);
  padding:42px;
- border-radius:26px;
- box-shadow:0 0 40px rgba(255,255,255,.05);
+ border-radius:28px;
+ box-shadow:0 0 35px rgba(255,255,255,.05);
  opacity:0;
  transform:translateY(60px);
  transition:.9s ease;
+ perspective:800px;
 }
 
 .card.show{opacity:1;transform:none}
 
+/* 3D tilt */
 .card:hover{
- transform:translateY(-14px) scale(1.03);
- box-shadow:0 0 55px var(--glow);
+ transform:rotateX(6deg) rotateY(-6deg) scale(1.05);
+ box-shadow:0 0 70px rgba(255,255,255,.25);
 }
 
-/* ================= Social ================= */
+/* ========== SOCIALS ========== */
 .socials{
  display:flex;
  justify-content:center;
- gap:25px;
+ gap:28px;
 }
 
 .socials a{
- text-decoration:none;
- padding:18px 30px;
- border-radius:50px;
- color:white;
+ padding:18px 34px;
+ border-radius:60px;
  border:1px solid rgba(255,255,255,.2);
+ text-decoration:none;
+ color:white;
  transition:.4s;
 }
 
 .socials a:hover{
  background:white;
  color:black;
- box-shadow:0 0 50px white;
+ box-shadow:0 0 60px white;
 }
 
-/* ================= Footer ================= */
-footer{text-align:center;padding:60px;opacity:.6}
+/* ========== FOOTER ========== */
+footer{
+ text-align:center;
+ padding:70px;
+ opacity:.6;
+}
 
-/* ================= Scrollbar ================= */
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-thumb{background:white;border-radius:20px}
+.signature{
+ margin-top:12px;
+ font-size:.9rem;
+ letter-spacing:3px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR / LOGO ================= -->
+<div class="progress"></div>
+
+<!-- NAV -->
 <div class="navbar">
  <a class="brand" href="#">
-  <img src="logo.png" alt="Logo">
+  <img src="logo.png">
   <span>MY BRAND</span>
  </a>
 </div>
 
 <canvas id="particles"></canvas>
 
-<div class="mist one"></div>
-<div class="mist two"></div>
-
-<!-- ================= HERO ================= -->
+<!-- HERO -->
 <div class="hero">
- <h1>Hi, I'm <br><strong>YOUR NAME</strong></h1>
- <span id="typing"></span>
+ <h1>YOUR NAME</h1>
+ <div class="tagline" id="typing"></div>
  <div class="divider"></div>
 </div>
 
-<!-- ================= ABOUT ================= -->
+<!-- ABOUT -->
 <section id="about">
+<div class="about-logo">
+ <img src="logo.png">
+</div>
 <h2>About Me</h2>
 <div class="grid">
  <div class="card">
-  I design cinematic black-and-white web experiences with motion,
-  clarity, and technical polish.
+  I craft cinematic monochrome interfaces with motion,
+  clarity, and obsessive attention to interaction design.
  </div>
 </div>
 </section>
 
-<!-- ================= SKILLS ================= -->
+<!-- SKILLS -->
 <section>
 <h2>Skills</h2>
 <div class="grid">
- <div class="card">Web Animation</div>
- <div class="card">JavaScript</div>
- <div class="card">UI Systems</div>
+ <div class="card">JavaScript / Web Motion</div>
+ <div class="card">Luxury UI Systems</div>
  <div class="card">Automation</div>
  <div class="card">Bots</div>
  <div class="card">Game Mods</div>
+ <div class="card">Creative Coding</div>
 </div>
 </section>
 
-<!-- ================= CONNECT ================= -->
+<!-- CONNECT -->
 <section>
 <h2>Connect</h2>
 <div class="socials">
@@ -232,11 +266,19 @@ footer{text-align:center;padding:60px;opacity:.6}
 </section>
 
 <footer>
-© 2026 • Black Edition Portfolio
+© 2026
+<div class="signature">— MY BRAND —</div>
 </footer>
 
 <script>
-/* ================= Particle Fog ================= */
+/* PROGRESS BAR */
+const bar=document.querySelector(".progress");
+window.addEventListener("scroll",()=>{
+ const sc=(scrollY/(document.body.scrollHeight-innerHeight))*100;
+ bar.style.width=sc+"%";
+});
+
+/* PARTICLES */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
@@ -247,11 +289,11 @@ function resize(){
 resize();
 addEventListener("resize",resize);
 
-let dots=Array.from({length:130},()=>({
+let dots=Array.from({length:140},()=>({
  x:Math.random()*innerWidth,
  y:Math.random()*innerHeight,
  r:Math.random()*2+1,
- s:Math.random()*0.25+0.15
+ s:Math.random()*0.3+0.2
 }));
 
 function animate(){
@@ -271,27 +313,25 @@ function animate(){
 }
 animate();
 
-/* ================= Scroll Reveal ================= */
+/* SCROLL REVEAL */
 const cards=document.querySelectorAll(".card");
-const observer=new IntersectionObserver(entries=>{
- entries.forEach(e=>{
-  if(e.isIntersecting)e.target.classList.add("show");
+const obs=new IntersectionObserver(e=>{
+ e.forEach(x=>{
+  if(x.isIntersecting)x.target.classList.add("show");
  });
 },{threshold:.25});
-cards.forEach(c=>observer.observe(c));
+cards.forEach(c=>obs.observe(c));
 
-/* ================= Typing Effect (Unique Touch) ================= */
+/* TYPING TAGLINE */
 const text="Creative Developer • Designer • Builder";
-const el=document.getElementById("typing");
 let i=0;
-
-function type(){
+const el=document.getElementById("typing");
+(function type(){
  if(i<=text.length){
   el.textContent=text.slice(0,i++);
-  setTimeout(type,80);
+  setTimeout(type,70);
  }
-}
-type();
+})();
 </script>
 
 </body>
