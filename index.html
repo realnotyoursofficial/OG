@@ -1,326 +1,286 @@
-<!--
-Animated Black & White Website (single-file) — Particles Enabled
-
-Update: Particles canvas is now enabled by default and upgraded with:
-- Density scaling (more particles on larger screens)
-- Mouse interactivity: hover repel and click burst
-- Performance guard for low-end devices
-- Easy config near the top of the script
-
-How to customize particles:
-- Edit `PARTICLE_CONFIG` in the <script> to change count, link distance, and speeds.
-- To disable particles, call `stopParticles()` or set `PARTICLE_CONFIG.enabled = false`.
-
-Save as index.html and open in browser.
---><!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Black & White Animated Site — Particles On</title>
-  <meta name="description" content="Black & white gradient website with particles background — starter template" />
-  <style>
-    :root{--bg-dark:#0b0b0b;--bg-light:#f7f7f7;--accent:#00ffd5;--card-radius:14px;--max-width:1100px;color-scheme:dark}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;}/* background container sits behind everything */
-.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
+<meta charset="UTF-8">
+<title>Premium Neon Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* Keep gradient but make particles visually dominant */
-.animated-gradient{position:absolute;inset:0;background:linear-gradient(135deg,#0b0b0b, #111, #fff);opacity:0.35}
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-/* Particles canvas (JS-driven) - sits above gradient */
-#particles{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
-.media-bg{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:0.85;filter:grayscale(100%) contrast(110%)}
-.page{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
-.container{width:100%;max-width:var(--max-width);margin:0 auto}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg, #fff, #ddd);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000}
-.brand h1{margin:0;font-size:18px;letter-spacing:0.6px}
-nav a{color:rgba(255,255,255,0.65);text-decoration:none;margin-left:18px;font-size:14px}
-.hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
-.hero-left h2{margin:0;font-size:38px;line-height:1.02}
-.hero-left p{color:rgba(255,255,255,0.65);margin-top:12px}
-.cta{margin-top:18px;display:flex;gap:12px}
-.btn{padding:12px 18px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.85);cursor:pointer}
-.btn--accent{background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(0,255,213,0.18);box-shadow:0 6px 30px rgba(0,255,213,0.03);color:var(--accent)}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:18px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.04)}
-.avatar{width:88px;height:88px;border-radius:14px;background:linear-gradient(180deg,#fff,#ddd);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000}
-.progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;margin-top:10px;overflow:hidden}
-.progress > i{display:block;height:100%;width:40%;background:linear-gradient(90deg, rgba(0,255,213,0.16), rgba(255,255,255,0.06));}
-.commands{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
-.command{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
-.muted{color:rgba(255,255,255,0.65);font-size:13px}
-@media (max-width:980px){.hero{grid-template-columns:1fr}.hero-right{order:2}.hero-left{order:1}.logo{width:48px;height:48px}}
-@media (max-width:520px){header{flex-direction:column;align-items:flex-start}.brand h1{font-size:16px}.hero-left h2{font-size:28px}}
-.card-wrap{perspective:1400px}
-.card-inner{transition:transform 0.6s cubic-bezier(.2,.9,.2,1);transform-style:preserve-3d}
-.card.flip .card-inner{transform:rotateY(180deg)}
-.card-front, .card-back{backface-visibility:hidden;border-radius:var(--card-radius)}
-.card-back{position:absolute;inset:0;padding:18px;transform:rotateY(180deg);}
-.accent-line{height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg, transparent, var(--accent), transparent);margin-top:16px}
+<style>
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
 
-  </style>
+body {
+  min-height: 100vh;
+  background: black;
+  overflow-x: hidden;
+}
+
+/* ================= BACKGROUND ANIMATION ================= */
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #0ff, #000 60%);
+  animation: pulse 10s infinite alternate;
+  z-index: -3;
+}
+
+@keyframes pulse {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(140deg); }
+}
+
+/* PARTICLES */
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 360px;
+  padding: 35px;
+  border-radius: 22px;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 0 40px rgba(0,255,255,0.4);
+  text-align: center;
+  transform-style: preserve-3d;
+  transition: 0.5s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0 80px cyan;
+}
+
+/* PROFILE */
+.avatar {
+  width: 120px;
+  height: 120px;
+  margin: auto;
+  border-radius: 50%;
+  background: url("https://i.imgur.com/Q9BGTuy.gif") center/cover;
+  border: 3px solid cyan;
+  box-shadow: 0 0 25px cyan;
+}
+
+/* TEXT */
+h1 {
+  margin-top: 20px;
+  color: white;
+  font-size: 28px;
+  text-shadow: 0 0 20px cyan;
+}
+
+p {
+  opacity: 0.8;
+  margin: 15px 0;
+}
+
+/* BUTTON */
+.btn {
+  display: inline-block;
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: linear-gradient(90deg, cyan, magenta);
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 15px;
+  box-shadow: 0 0 20px cyan;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 40px magenta;
+}
+
+/* SOCIALS */
+.socials {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.socials a {
+  color: white;
+  font-size: 22px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.1);
+  transition: 0.4s;
+}
+
+.socials a:hover {
+  box-shadow: 0 0 25px cyan;
+  transform: translateY(-6px);
+}
+
+/* ================= SECTIONS ================= */
+
+section {
+  min-height: 80vh;
+  padding: 120px 10%;
+  color: white;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: 1s;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* GLOW GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 25px;
+}
+
+.glow-box {
+  padding: 25px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: 0.5s;
+}
+
+.glow-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px cyan;
+}
+</style>
 </head>
-<body>  <div class="bg-layer" aria-hidden="true">
-    <!-- Subtle gradient beneath particles -->
-    <div class="animated-gradient"></div>
-    <!-- Particles canvas (enabled by default) -->
-    <canvas id="particles" aria-hidden="true"></canvas>
-  </div>  <main class="page">
-    <div class="container">
-      <header>
-        <div class="brand">
-          <div class="logo">NY</div>
-          <div>
-            <h1>Ny Universe⚡</h1>
-            <div class="muted">Premium black & white theme • Particles enabled</div>
-          </div>
-        </div>
-        <nav>
-          <a href="#commands">Commands</a>
-          <a href="#status">Bot Status</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </header><section class="hero">
-    <div class="hero-left">
-      <h2>Make it yours — interactive particles, animated UI.</h2>
-      <p class="muted">Particles respond to mouse hover (repel) and click (burst). Use the BUTTONS to toggle them on/off.</p>
-      <div class="cta">
-        <button class="btn btn--accent" onclick="toggleFlip()">Open Profile Card</button>
-        <button class="btn" onclick="toggleParticles()" id="particleToggle">Toggle Particles</button>
-      </div>
+<body>
 
-      <div id="commands" class="commands" style="margin-top:26px">
-        <div class="command card">
-          <div class="muted">Play music</div>
-          <strong>/play &lt;link&gt;</strong>
-        </div>
-        <div class="command card">
-          <div class="muted">Queue</div>
-          <strong>!queue</strong>
-        </div>
-        <div class="command card">
-          <div class="muted">Lyrics</div>
-          <strong>/lyrics &lt;song&gt;</strong>
-        </div>
-        <div class="command card">
-          <div class="muted">Join VC</div>
-          <strong>Auto-join</strong>
-        </div>
-      </div>
+<div class="bg"></div>
+<canvas id="rain"></canvas>
 
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="card" id="tilt">
+    <div class="avatar"></div>
+    <h1>Premium Profile</h1>
+    <p>Ultra-modern neon personal site with cinematic effects.</p>
+
+    <a class="btn" href="#">Explore</a>
+
+    <div class="socials">
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-discord"></i></a>
+      <a href="#"><i class="fab fa-github"></i></a>
     </div>
-
-    <div class="hero-right">
-      <div class="card-wrap" style="position:relative;width:100%;max-width:420px;margin-left:auto">
-        <div id="profileCard" class="card card-inner" style="position:relative;transform-origin:center center;">
-
-          <div class="card-front card-front">
-            <div style="display:flex;gap:12px;align-items:center">
-              <div class="avatar">NY</div>
-              <div>
-                <div style="font-weight:700">Ny Universe⚡</div>
-                <div class="muted">Discord Music Bot • Active</div>
-                <div class="progress"><i></i></div>
-              </div>
-            </div>
-            <div class="accent-line"></div>
-            <div style="margin-top:12px;color:var(--muted);font-size:13px">Now playing: <strong id="nowPlaying">Nothing</strong></div>
-            <div class="commands" style="margin-top:12px">
-              <div class="command">Loop</div>
-              <div class="command">Shuffle</div>
-            </div>
-          </div>
-
-          <div class="card-back card-back">
-            <h3 style="margin-top:0">About</h3>
-            <p class="muted">This panel can flip to show more info — links, invite button, API status and more.</p>
-            <div style="margin-top:14px;display:flex;gap:8px">
-              <button class="btn btn--accent" onclick="copyInvite()">Copy Invite</button>
-              <button class="btn" onclick="openDocs()">Docs</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <section id="status" style="margin-top:36px">
-    <h3>Bot Status</h3>
-    <div class="muted">Current status from API (demo):</div>
-    <div id="statusBox" class="card" style="margin-top:12px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-weight:700">Eyes Official &lt;3</div>
-        <div class="muted" id="statusText">Fetching...</div>
-      </div>
-      <div class="muted">Members: <span id="memberCount">-</span></div>
-    </div>
-  </section>
-
-  <footer style="margin-top:48px;color:rgba(255,255,255,0.65);font-size:13px">
-    Built with ❤️ — edit this file to match your branding. 
-  </footer>
-
+  </div>
 </div>
 
-  </main>  <script>
-    /* ===== PARTICLES CONFIG ===== */
-    const PARTICLE_CONFIG = {
-      enabled: true,           // set false to disable particles
-      baseCount: 80,           // base number (multiplied by density factor)
-      maxOnLarge: 200,         // hard cap
-      linkDistance: 110,
-      maxSpeed: 0.45,
-      minSpeed: 0.05,
-      sizeRange: [0.8, 2.6],
-      hoverRepelRadius: 120,
-      clickBurst: 12,
-      lowPerfThreshold: 700  // if width < this, reduce particle count
-    };
+<!-- ================= ABOUT ================= -->
+<section>
+  <h2 class="reveal">What Makes It Premium?</h2>
+  <div class="grid">
+    <div class="glow-box reveal">Glassmorphism UI</div>
+    <div class="glow-box reveal">Neon Glow System</div>
+    <div class="glow-box reveal">Scroll Animations</div>
+    <div class="glow-box reveal">Parallax Motion</div>
+  </div>
+</section>
 
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext && canvas.getContext('2d');
-    let particles = [];
-    let enabled = PARTICLE_CONFIG.enabled && !!ctx;
-    let mouse = {x: null, y: null, down: false};
+<!-- ================= JS ================= -->
 
-    function resize(){
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initParticles();
+<script>
+/* ========== RAIN PARTICLES ========== */
+const canvas = document.getElementById("rain");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.onresize = resize;
+
+let drops = [];
+
+for (let i = 0; i < 150; i++) {
+  drops.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    l: Math.random() * 20,
+    s: Math.random() * 4 + 2
+  });
+}
+
+function rain() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle = "rgba(0,255,255,0.5)";
+  ctx.lineWidth = 1;
+
+  drops.forEach(d => {
+    ctx.beginPath();
+    ctx.moveTo(d.x, d.y);
+    ctx.lineTo(d.x, d.y + d.l);
+    ctx.stroke();
+    d.y += d.s;
+    if (d.y > canvas.height) d.y = -20;
+  });
+
+  requestAnimationFrame(rain);
+}
+rain();
+
+/* ========== TILT EFFECT ========== */
+
+const card = document.getElementById("tilt");
+
+document.addEventListener("mousemove", e => {
+  let x = (window.innerWidth / 2 - e.pageX) / 25;
+  let y = (window.innerHeight / 2 - e.pageY) / 25;
+  card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* ========== SCROLL REVEAL ========== */
+
+const reveals = document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll", () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      el.classList.add("active");
     }
+  });
+});
+</script>
 
-    function rand(min,max){return Math.random()*(max-min)+min}
-
-    function computeCount(){
-      const areaFactor = Math.sqrt((canvas.width*canvas.height)/(1366*768));
-      let count = Math.round(PARTICLE_CONFIG.baseCount * areaFactor);
-      if(canvas.width < PARTICLE_CONFIG.lowPerfThreshold) count = Math.round(count * 0.6);
-      return Math.min(count, PARTICLE_CONFIG.maxOnLarge);
-    }
-
-    function initParticles(){
-      particles = [];
-      if(!enabled) return;
-      const count = computeCount();
-      for(let i=0;i<count;i++){
-        particles.push({
-          x:rand(0,canvas.width),
-          y:rand(0,canvas.height),
-          vx:rand(-PARTICLE_CONFIG.maxSpeed, PARTICLE_CONFIG.maxSpeed),
-          vy:rand(-PARTICLE_CONFIG.maxSpeed, PARTICLE_CONFIG.maxSpeed),
-          r:rand(PARTICLE_CONFIG.sizeRange[0], PARTICLE_CONFIG.sizeRange[1]),
-          a:rand(0.02,0.12)
-        });
-      }
-    }
-
-    function draw(){
-      if(!ctx || !enabled) return;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-
-      // update particles
-      for(const p of particles){
-        // simple physics
-        p.x += p.vx; p.y += p.vy;
-        // wrap
-        if(p.x< -10) p.x = canvas.width + 10; if(p.x>canvas.width+10) p.x = -10;
-        if(p.y< -10) p.y = canvas.height + 10; if(p.y>canvas.height+10) p.y = -10;
-
-        // hover repel
-        if(mouse.x !== null){
-          const dx = p.x - mouse.x; const dy = p.y - mouse.y; const d2 = dx*dx + dy*dy;
-          if(d2 < PARTICLE_CONFIG.hoverRepelRadius * PARTICLE_CONFIG.hoverRepelRadius){
-            const d = Math.sqrt(d2) || 1; const force = (PARTICLE_CONFIG.hoverRepelRadius - d) / PARTICLE_CONFIG.hoverRepelRadius;
-            p.vx += (dx/d) * force * 0.6; p.vy += (dy/d) * force * 0.6;
-          }
-        }
-
-        // limit speeds
-        const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
-        if(spd > PARTICLE_CONFIG.maxSpeed){ p.vx *= 0.95; p.vy *= 0.95 }
-      }
-
-      // draw links
-      for(let i=0;i<particles.length;i++){
-        const a = particles[i];
-        for(let j=i+1;j<particles.length;j++){
-          const b = particles[j];
-          const dx=a.x-b.x, dy=a.y-b.y; const d = Math.sqrt(dx*dx+dy*dy);
-          if(d < PARTICLE_CONFIG.linkDistance){
-            const alpha = Math.max(0, 0.09 - (d / (PARTICLE_CONFIG.linkDistance*2)));
-            ctx.beginPath(); ctx.strokeStyle = `rgba(255,255,255,${alpha})`; ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-          }
-        }
-      }
-
-      // draw particles
-      for(const p of particles){
-        ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.a})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-      }
-
-      requestAnimationFrame(draw);
-    }
-
-    function startParticles(){
-      if(!ctx) return; enabled = true; canvas.style.opacity = 1; resize(); initParticles(); draw(); document.getElementById('particleToggle').textContent = 'Toggle Particles';
-    }
-    function stopParticles(){ enabled=false; particles = []; canvas.style.opacity = 0; document.getElementById('particleToggle').textContent = 'Particles Off'; }
-    function toggleParticles(){ if(enabled) stopParticles(); else startParticles(); }
-
-    // Interaction handlers
-    window.addEventListener('mousemove', (e)=>{ mouse.x = e.clientX; mouse.y = e.clientY; });
-    window.addEventListener('mouseleave', ()=>{ mouse.x = null; mouse.y = null; });
-    window.addEventListener('click', (e)=>{
-      // burst: spawn a few particles near click point
-      if(!enabled) return;
-      for(let i=0;i<PARTICLE_CONFIG.clickBurst;i++){
-        particles.push({ x:e.clientX + rand(-8,8), y:e.clientY + rand(-8,8), vx:rand(-1,1), vy:rand(-1,1), r:rand(0.6,3), a:rand(0.05,0.18) });
-      }
-      // limit array size
-      if(particles.length > PARTICLE_CONFIG.maxOnLarge) particles.splice(0, particles.length - PARTICLE_CONFIG.maxOnLarge);
-    });
-
-    window.addEventListener('resize', resize);
-
-    // performance safety: pause if tab not visible
-    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopParticles(); else { if(PARTICLE_CONFIG.enabled) startParticles(); }});
-
-    // Start by default if enabled
-    if(PARTICLE_CONFIG.enabled) startParticles(); else stopParticles();
-
-    /* === Flip card demo & other UI helpers === */
-    const profileCard = document.getElementById('profileCard');
-    let flipped = false;
-    function toggleFlip(){ flipped = !flipped; if(flipped) profileCard.classList.add('flip'); else profileCard.classList.remove('flip'); }
-    function setNowPlaying(title){ document.getElementById('nowPlaying').textContent = title }
-    function pulseProgress(){ const el = document.querySelector('.progress > i'); if(!el) return; el.style.width = Math.floor(Math.random()*80+10)+'%'; }
-    setInterval(pulseProgress, 2500);
-    function copyInvite(){ navigator.clipboard && navigator.clipboard.writeText('https://discord.gg/UW7VcVCvn9').then(()=>alert('Invite copied!')) }
-    function openDocs(){ window.open('#','_blank') }
-
-    /* === Fetch bot status (placeholder) === */
-    async function fetchBotStatus(){
-      try{
-        const res = await fetch('/api/bot-status.json');
-        if(!res.ok) throw new Error('no status');
-        const data = await res.json();
-        document.getElementById('statusText').textContent = data.status || 'online';
-        document.getElementById('memberCount').textContent = data.members ?? '-';
-        setNowPlaying(data.now || '—');
-      }catch(e){
-        document.getElementById('statusText').textContent = 'Offline (demo)';
-        document.getElementById('memberCount').textContent = '—';
-      }
-    }
-
-    // accessibility: reduce motion
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if(mq.matches){ stopParticles(); }
-  </script></body>
+</body>
 </html>
