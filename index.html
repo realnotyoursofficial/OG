@@ -1,338 +1,326 @@
-<!DOCTYPE html>
+<!--
+Animated Black & White Website (single-file) — Particles Enabled
+
+Update: Particles canvas is now enabled by default and upgraded with:
+- Density scaling (more particles on larger screens)
+- Mouse interactivity: hover repel and click burst
+- Performance guard for low-end devices
+- Easy config near the top of the script
+
+How to customize particles:
+- Edit `PARTICLE_CONFIG` in the <script> to change count, link distance, and speeds.
+- To disable particles, call `stopParticles()` or set `PARTICLE_CONFIG.enabled = false`.
+
+Save as index.html and open in browser.
+--><!doctype html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Black Signature Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Black & White Animated Site — Particles On</title>
+  <meta name="description" content="Black & white gradient website with particles background — starter template" />
+  <style>
+    :root{--bg-dark:#0b0b0b;--bg-light:#f7f7f7;--accent:#00ffd5;--card-radius:14px;--max-width:1100px;color-scheme:dark}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;}/* background container sits behind everything */
+.bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+/* Keep gradient but make particles visually dominant */
+.animated-gradient{position:absolute;inset:0;background:linear-gradient(135deg,#0b0b0b, #111, #fff);opacity:0.35}
 
-<style>
-:root{
- --bg:#000;
- --white:#fff;
- --glass:rgba(255,255,255,.06);
- --glow:rgba(255,255,255,.35);
-}
+/* Particles canvas (JS-driven) - sits above gradient */
+#particles{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+.media-bg{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:0.85;filter:grayscale(100%) contrast(110%)}
+.page{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px}
+.container{width:100%;max-width:var(--max-width);margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg, #fff, #ddd);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000}
+.brand h1{margin:0;font-size:18px;letter-spacing:0.6px}
+nav a{color:rgba(255,255,255,0.65);text-decoration:none;margin-left:18px;font-size:14px}
+.hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center}
+.hero-left h2{margin:0;font-size:38px;line-height:1.02}
+.hero-left p{color:rgba(255,255,255,0.65);margin-top:12px}
+.cta{margin-top:18px;display:flex;gap:12px}
+.btn{padding:12px 18px;border-radius:12px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.85);cursor:pointer}
+.btn--accent{background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));border:1px solid rgba(0,255,213,0.18);box-shadow:0 6px 30px rgba(0,255,213,0.03);color:var(--accent)}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:18px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.04)}
+.avatar{width:88px;height:88px;border-radius:14px;background:linear-gradient(180deg,#fff,#ddd);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000}
+.progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;margin-top:10px;overflow:hidden}
+.progress > i{display:block;height:100%;width:40%;background:linear-gradient(90deg, rgba(0,255,213,0.16), rgba(255,255,255,0.06));}
+.commands{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+.command{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
+.muted{color:rgba(255,255,255,0.65);font-size:13px}
+@media (max-width:980px){.hero{grid-template-columns:1fr}.hero-right{order:2}.hero-left{order:1}.logo{width:48px;height:48px}}
+@media (max-width:520px){header{flex-direction:column;align-items:flex-start}.brand h1{font-size:16px}.hero-left h2{font-size:28px}}
+.card-wrap{perspective:1400px}
+.card-inner{transition:transform 0.6s cubic-bezier(.2,.9,.2,1);transform-style:preserve-3d}
+.card.flip .card-inner{transform:rotateY(180deg)}
+.card-front, .card-back{backface-visibility:hidden;border-radius:var(--card-radius)}
+.card-back{position:absolute;inset:0;padding:18px;transform:rotateY(180deg);}
+.accent-line{height:2px;width:100%;border-radius:2px;background:linear-gradient(90deg, transparent, var(--accent), transparent);margin-top:16px}
 
-html{scroll-behavior:smooth}
-body{
- background:var(--bg);
- color:white;
- overflow-x:hidden;
-}
-
-/* ========== FILM GRAIN ========== */
-body::after{
- content:"";
- position:fixed;
- inset:0;
- pointer-events:none;
- background:url("https://grainy-gradients.vercel.app/noise.svg");
- opacity:.08;
- z-index:9999;
-}
-
-/* ========== SCROLL BAR ========== */
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-thumb{background:white;border-radius:20px}
-
-/* ========== PROGRESS BAR ========== */
-.progress{
- position:fixed;
- top:0;
- left:0;
- height:2px;
- background:white;
- width:0%;
- z-index:99999;
-}
-
-/* ========== NAVBAR ========== */
-.navbar{
- position:fixed;
- top:18px;
- left:50%;
- transform:translateX(-50%);
- width:90%;
- max-width:1200px;
- padding:14px 28px;
- backdrop-filter:blur(20px);
- background:rgba(0,0,0,.55);
- border-radius:50px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- z-index:5000;
-}
-
-.brand{
- display:flex;
- align-items:center;
- gap:12px;
- color:white;
- text-decoration:none;
- letter-spacing:2px;
-}
-
-.brand img{
- width:38px;
- filter:invert(1);
-}
-
-/* ========== PARTICLES ========== */
-#particles{
- position:fixed;
- inset:0;
- z-index:-5;
-}
-
-/* ========== HERO ========== */
-.hero{
- min-height:100vh;
- display:flex;
- justify-content:center;
- align-items:center;
- flex-direction:column;
- gap:25px;
- text-align:center;
-}
-
-.hero h1{
- font-size:clamp(3rem,7vw,6rem);
- background:linear-gradient(90deg,#fff,#999,#fff);
- background-size:300%;
- -webkit-background-clip:text;
- color:transparent;
- animation:grad 7s linear infinite;
-}
-
-@keyframes grad{
- 0%{background-position:0%}
- 100%{background-position:300%}
-}
-
-.tagline{opacity:.8;font-size:1.3rem;min-height:32px}
-
-.divider{
- width:0;
- height:1px;
- background:white;
- opacity:.5;
- animation:grow 2.5s forwards;
-}
-
-@keyframes grow{to{width:200px}}
-
-/* ========== SECTIONS ========== */
-section{padding:130px 10%}
-
-h2{text-align:center;font-size:2.7rem;margin-bottom:60px}
-
-/* ABOUT LOGO */
-.about-logo{
- display:flex;
- justify-content:center;
- margin-bottom:25px;
-}
-
-.about-logo img{
- width:70px;
- opacity:.85;
- filter:invert(1);
-}
-
-/* ========== GRID / CARDS ========== */
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
- gap:40px;
-}
-
-.card{
- background:var(--glass);
- backdrop-filter:blur(22px);
- padding:42px;
- border-radius:28px;
- box-shadow:0 0 35px rgba(255,255,255,.05);
- opacity:0;
- transform:translateY(60px);
- transition:.9s ease;
- perspective:800px;
-}
-
-.card.show{opacity:1;transform:none}
-
-/* 3D tilt */
-.card:hover{
- transform:rotateX(6deg) rotateY(-6deg) scale(1.05);
- box-shadow:0 0 70px rgba(255,255,255,.25);
-}
-
-/* ========== SOCIALS ========== */
-.socials{
- display:flex;
- justify-content:center;
- gap:28px;
-}
-
-.socials a{
- padding:18px 34px;
- border-radius:60px;
- border:1px solid rgba(255,255,255,.2);
- text-decoration:none;
- color:white;
- transition:.4s;
-}
-
-.socials a:hover{
- background:white;
- color:black;
- box-shadow:0 0 60px white;
-}
-
-/* ========== FOOTER ========== */
-footer{
- text-align:center;
- padding:70px;
- opacity:.6;
-}
-
-.signature{
- margin-top:12px;
- font-size:.9rem;
- letter-spacing:3px;
-}
-</style>
+  </style>
 </head>
+<body>  <div class="bg-layer" aria-hidden="true">
+    <!-- Subtle gradient beneath particles -->
+    <div class="animated-gradient"></div>
+    <!-- Particles canvas (enabled by default) -->
+    <canvas id="particles" aria-hidden="true"></canvas>
+  </div>  <main class="page">
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo">NY</div>
+          <div>
+            <h1>Ny Universe⚡</h1>
+            <div class="muted">Premium black & white theme • Particles enabled</div>
+          </div>
+        </div>
+        <nav>
+          <a href="#commands">Commands</a>
+          <a href="#status">Bot Status</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header><section class="hero">
+    <div class="hero-left">
+      <h2>Make it yours — interactive particles, animated UI.</h2>
+      <p class="muted">Particles respond to mouse hover (repel) and click (burst). Use the BUTTONS to toggle them on/off.</p>
+      <div class="cta">
+        <button class="btn btn--accent" onclick="toggleFlip()">Open Profile Card</button>
+        <button class="btn" onclick="toggleParticles()" id="particleToggle">Toggle Particles</button>
+      </div>
 
-<body>
+      <div id="commands" class="commands" style="margin-top:26px">
+        <div class="command card">
+          <div class="muted">Play music</div>
+          <strong>/play &lt;link&gt;</strong>
+        </div>
+        <div class="command card">
+          <div class="muted">Queue</div>
+          <strong>!queue</strong>
+        </div>
+        <div class="command card">
+          <div class="muted">Lyrics</div>
+          <strong>/lyrics &lt;song&gt;</strong>
+        </div>
+        <div class="command card">
+          <div class="muted">Join VC</div>
+          <strong>Auto-join</strong>
+        </div>
+      </div>
 
-<div class="progress"></div>
+    </div>
 
-<!-- NAV -->
-<div class="navbar">
- <a class="brand" href="#">
-  <img src="logo.png">
-  <span>MY BRAND</span>
- </a>
+    <div class="hero-right">
+      <div class="card-wrap" style="position:relative;width:100%;max-width:420px;margin-left:auto">
+        <div id="profileCard" class="card card-inner" style="position:relative;transform-origin:center center;">
+
+          <div class="card-front card-front">
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="avatar">NY</div>
+              <div>
+                <div style="font-weight:700">Ny Universe⚡</div>
+                <div class="muted">Discord Music Bot • Active</div>
+                <div class="progress"><i></i></div>
+              </div>
+            </div>
+            <div class="accent-line"></div>
+            <div style="margin-top:12px;color:var(--muted);font-size:13px">Now playing: <strong id="nowPlaying">Nothing</strong></div>
+            <div class="commands" style="margin-top:12px">
+              <div class="command">Loop</div>
+              <div class="command">Shuffle</div>
+            </div>
+          </div>
+
+          <div class="card-back card-back">
+            <h3 style="margin-top:0">About</h3>
+            <p class="muted">This panel can flip to show more info — links, invite button, API status and more.</p>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <button class="btn btn--accent" onclick="copyInvite()">Copy Invite</button>
+              <button class="btn" onclick="openDocs()">Docs</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="status" style="margin-top:36px">
+    <h3>Bot Status</h3>
+    <div class="muted">Current status from API (demo):</div>
+    <div id="statusBox" class="card" style="margin-top:12px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-weight:700">Eyes Official &lt;3</div>
+        <div class="muted" id="statusText">Fetching...</div>
+      </div>
+      <div class="muted">Members: <span id="memberCount">-</span></div>
+    </div>
+  </section>
+
+  <footer style="margin-top:48px;color:rgba(255,255,255,0.65);font-size:13px">
+    Built with ❤️ — edit this file to match your branding. 
+  </footer>
+
 </div>
 
-<canvas id="particles"></canvas>
+  </main>  <script>
+    /* ===== PARTICLES CONFIG ===== */
+    const PARTICLE_CONFIG = {
+      enabled: true,           // set false to disable particles
+      baseCount: 80,           // base number (multiplied by density factor)
+      maxOnLarge: 200,         // hard cap
+      linkDistance: 110,
+      maxSpeed: 0.45,
+      minSpeed: 0.05,
+      sizeRange: [0.8, 2.6],
+      hoverRepelRadius: 120,
+      clickBurst: 12,
+      lowPerfThreshold: 700  // if width < this, reduce particle count
+    };
 
-<!-- HERO -->
-<div class="hero">
- <h1>YOUR NAME</h1>
- <div class="tagline" id="typing"></div>
- <div class="divider"></div>
-</div>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    let particles = [];
+    let enabled = PARTICLE_CONFIG.enabled && !!ctx;
+    let mouse = {x: null, y: null, down: false};
 
-<!-- ABOUT -->
-<section id="about">
-<div class="about-logo">
- <img src="logo.png">
-</div>
-<h2>About Me</h2>
-<div class="grid">
- <div class="card">
-  I craft cinematic monochrome interfaces with motion,
-  clarity, and obsessive attention to interaction design.
- </div>
-</div>
-</section>
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+    }
 
-<!-- SKILLS -->
-<section>
-<h2>Skills</h2>
-<div class="grid">
- <div class="card">JavaScript / Web Motion</div>
- <div class="card">Luxury UI Systems</div>
- <div class="card">Automation</div>
- <div class="card">Bots</div>
- <div class="card">Game Mods</div>
- <div class="card">Creative Coding</div>
-</div>
-</section>
+    function rand(min,max){return Math.random()*(max-min)+min}
 
-<!-- CONNECT -->
-<section>
-<h2>Connect</h2>
-<div class="socials">
- <a href="https://instagram.com/YOUR_ID" target="_blank">Instagram</a>
- <a href="https://discord.gg/YOUR_INVITE" target="_blank">Discord</a>
-</div>
-</section>
+    function computeCount(){
+      const areaFactor = Math.sqrt((canvas.width*canvas.height)/(1366*768));
+      let count = Math.round(PARTICLE_CONFIG.baseCount * areaFactor);
+      if(canvas.width < PARTICLE_CONFIG.lowPerfThreshold) count = Math.round(count * 0.6);
+      return Math.min(count, PARTICLE_CONFIG.maxOnLarge);
+    }
 
-<footer>
-© 2026
-<div class="signature">— MY BRAND —</div>
-</footer>
+    function initParticles(){
+      particles = [];
+      if(!enabled) return;
+      const count = computeCount();
+      for(let i=0;i<count;i++){
+        particles.push({
+          x:rand(0,canvas.width),
+          y:rand(0,canvas.height),
+          vx:rand(-PARTICLE_CONFIG.maxSpeed, PARTICLE_CONFIG.maxSpeed),
+          vy:rand(-PARTICLE_CONFIG.maxSpeed, PARTICLE_CONFIG.maxSpeed),
+          r:rand(PARTICLE_CONFIG.sizeRange[0], PARTICLE_CONFIG.sizeRange[1]),
+          a:rand(0.02,0.12)
+        });
+      }
+    }
 
-<script>
-/* PROGRESS BAR */
-const bar=document.querySelector(".progress");
-window.addEventListener("scroll",()=>{
- const sc=(scrollY/(document.body.scrollHeight-innerHeight))*100;
- bar.style.width=sc+"%";
-});
+    function draw(){
+      if(!ctx || !enabled) return;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
 
-/* PARTICLES */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
+      // update particles
+      for(const p of particles){
+        // simple physics
+        p.x += p.vx; p.y += p.vy;
+        // wrap
+        if(p.x< -10) p.x = canvas.width + 10; if(p.x>canvas.width+10) p.x = -10;
+        if(p.y< -10) p.y = canvas.height + 10; if(p.y>canvas.height+10) p.y = -10;
 
-function resize(){
- canvas.width=innerWidth;
- canvas.height=innerHeight;
-}
-resize();
-addEventListener("resize",resize);
+        // hover repel
+        if(mouse.x !== null){
+          const dx = p.x - mouse.x; const dy = p.y - mouse.y; const d2 = dx*dx + dy*dy;
+          if(d2 < PARTICLE_CONFIG.hoverRepelRadius * PARTICLE_CONFIG.hoverRepelRadius){
+            const d = Math.sqrt(d2) || 1; const force = (PARTICLE_CONFIG.hoverRepelRadius - d) / PARTICLE_CONFIG.hoverRepelRadius;
+            p.vx += (dx/d) * force * 0.6; p.vy += (dy/d) * force * 0.6;
+          }
+        }
 
-let dots=Array.from({length:140},()=>({
- x:Math.random()*innerWidth,
- y:Math.random()*innerHeight,
- r:Math.random()*2+1,
- s:Math.random()*0.3+0.2
-}));
+        // limit speeds
+        const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+        if(spd > PARTICLE_CONFIG.maxSpeed){ p.vx *= 0.95; p.vy *= 0.95 }
+      }
 
-function animate(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle="rgba(255,255,255,.45)";
- dots.forEach(d=>{
-  ctx.beginPath();
-  ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-  ctx.fill();
-  d.y+=d.s;
-  if(d.y>canvas.height){
-    d.y=0;
-    d.x=Math.random()*canvas.width;
-  }
- });
- requestAnimationFrame(animate);
-}
-animate();
+      // draw links
+      for(let i=0;i<particles.length;i++){
+        const a = particles[i];
+        for(let j=i+1;j<particles.length;j++){
+          const b = particles[j];
+          const dx=a.x-b.x, dy=a.y-b.y; const d = Math.sqrt(dx*dx+dy*dy);
+          if(d < PARTICLE_CONFIG.linkDistance){
+            const alpha = Math.max(0, 0.09 - (d / (PARTICLE_CONFIG.linkDistance*2)));
+            ctx.beginPath(); ctx.strokeStyle = `rgba(255,255,255,${alpha})`; ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+          }
+        }
+      }
 
-/* SCROLL REVEAL */
-const cards=document.querySelectorAll(".card");
-const obs=new IntersectionObserver(e=>{
- e.forEach(x=>{
-  if(x.isIntersecting)x.target.classList.add("show");
- });
-},{threshold:.25});
-cards.forEach(c=>obs.observe(c));
+      // draw particles
+      for(const p of particles){
+        ctx.beginPath(); ctx.fillStyle = `rgba(255,255,255,${p.a})`; ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+      }
 
-/* TYPING TAGLINE */
-const text="Creative Developer • Designer • Builder";
-let i=0;
-const el=document.getElementById("typing");
-(function type(){
- if(i<=text.length){
-  el.textContent=text.slice(0,i++);
-  setTimeout(type,70);
- }
-})();
-</script>
+      requestAnimationFrame(draw);
+    }
 
-</body>
+    function startParticles(){
+      if(!ctx) return; enabled = true; canvas.style.opacity = 1; resize(); initParticles(); draw(); document.getElementById('particleToggle').textContent = 'Toggle Particles';
+    }
+    function stopParticles(){ enabled=false; particles = []; canvas.style.opacity = 0; document.getElementById('particleToggle').textContent = 'Particles Off'; }
+    function toggleParticles(){ if(enabled) stopParticles(); else startParticles(); }
+
+    // Interaction handlers
+    window.addEventListener('mousemove', (e)=>{ mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseleave', ()=>{ mouse.x = null; mouse.y = null; });
+    window.addEventListener('click', (e)=>{
+      // burst: spawn a few particles near click point
+      if(!enabled) return;
+      for(let i=0;i<PARTICLE_CONFIG.clickBurst;i++){
+        particles.push({ x:e.clientX + rand(-8,8), y:e.clientY + rand(-8,8), vx:rand(-1,1), vy:rand(-1,1), r:rand(0.6,3), a:rand(0.05,0.18) });
+      }
+      // limit array size
+      if(particles.length > PARTICLE_CONFIG.maxOnLarge) particles.splice(0, particles.length - PARTICLE_CONFIG.maxOnLarge);
+    });
+
+    window.addEventListener('resize', resize);
+
+    // performance safety: pause if tab not visible
+    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) stopParticles(); else { if(PARTICLE_CONFIG.enabled) startParticles(); }});
+
+    // Start by default if enabled
+    if(PARTICLE_CONFIG.enabled) startParticles(); else stopParticles();
+
+    /* === Flip card demo & other UI helpers === */
+    const profileCard = document.getElementById('profileCard');
+    let flipped = false;
+    function toggleFlip(){ flipped = !flipped; if(flipped) profileCard.classList.add('flip'); else profileCard.classList.remove('flip'); }
+    function setNowPlaying(title){ document.getElementById('nowPlaying').textContent = title }
+    function pulseProgress(){ const el = document.querySelector('.progress > i'); if(!el) return; el.style.width = Math.floor(Math.random()*80+10)+'%'; }
+    setInterval(pulseProgress, 2500);
+    function copyInvite(){ navigator.clipboard && navigator.clipboard.writeText('https://discord.gg/UW7VcVCvn9').then(()=>alert('Invite copied!')) }
+    function openDocs(){ window.open('#','_blank') }
+
+    /* === Fetch bot status (placeholder) === */
+    async function fetchBotStatus(){
+      try{
+        const res = await fetch('/api/bot-status.json');
+        if(!res.ok) throw new Error('no status');
+        const data = await res.json();
+        document.getElementById('statusText').textContent = data.status || 'online';
+        document.getElementById('memberCount').textContent = data.members ?? '-';
+        setNowPlaying(data.now || '—');
+      }catch(e){
+        document.getElementById('statusText').textContent = 'Offline (demo)';
+        document.getElementById('memberCount').textContent = '—';
+      }
+    }
+
+    // accessibility: reduce motion
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(mq.matches){ stopParticles(); }
+  </script></body>
 </html>
